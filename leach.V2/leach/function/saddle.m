@@ -1,5 +1,5 @@
 function saddle()
-    z = [1 1 1];
+    z = [15 18 9];
     lamda = zeros(3,3);
     theta = [0 0 0];
 
