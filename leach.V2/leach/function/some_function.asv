@@ -11,6 +11,7 @@ function [z, lamda, target] = some_function(index, target, iteration, z, lamda, 
     Energy_init = 0.5; 
     Energy_transfer = 50*0.000000001;
     Energy_receive = 50*0.000000001;
+    density = 0.7;
 
     bitrate = 6;
     ctrPacketLength = 200;
@@ -35,12 +36,14 @@ function [z, lamda, target] = some_function(index, target, iteration, z, lamda, 
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
         
-
-%         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
         syms a b
-        h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
-        h_constraintdiff = abs(diff(h_constraint(a,b),a));
+%         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
+        h_constraint(x) = 3./2.*abs(sqrt(a./4./density)-sqrt(b./4./density));
+        h_constraintdiff = diff(h_constraint(a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+
+        
+
 %         y = z(index) + theta(index);        %expect life time
 %         grad1 = gradient(y);                % check gradient function 
 %         g = z(index) + z(target(index)) + theta(index) + theta(target(index));
@@ -62,10 +65,9 @@ function [z, lamda, target] = some_function(index, target, iteration, z, lamda, 
     L_expectdiff = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);
 
-    syms a b
-    h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
-    h_constraintdiff = abs(diff(h_constraint(a,b),a));
-    h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+    h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./0.7)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./0.7);
+    h_constraintdiff = diff(h_constraint(x));
+    h_gradient = subs(h_constraintdiff,x,z(index));
 
 
 %     y = z_new + theta(index);
