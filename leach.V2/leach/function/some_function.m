@@ -50,11 +50,11 @@ function [z, lamda, target] = some_function(index, target, iteration, z, lamda, 
     end
     z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
     
-    syms z
-        L_expect(z) = Energy_init ./ ( ( (z-1)./ z ) .*(Energy_receive+Energy_transfer).* packetLength ./ bitrate+...
-            ctrPacketLength.*Energy_transfer./ ( z.* bitrate ) );
-        L_expectdiff = diff(L_expect(z));
-        L_gradient1 = subs(L_expectdiff,z,z_new);
+    syms x
+    L_expect(x) = Energy_init ./ ( ( (x-1)./ x ) .*(Energy_receive+Energy_transfer).* packetLength ./ bitrate+...
+        ctrPacketLength.*Energy_transfer./ ( x.* bitrate ) );
+    L_expectdiff = diff(L_expect(x));
+    L_gradient1 = subs(L_expectdiff,x,z_new);
 %     y = z_new + theta(index);
 %     grad1 = gradient(y);                % check gradient function 
 %     g = z_new + z(target(index)) + theta(index) + theta(target(index));

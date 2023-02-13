@@ -16,6 +16,8 @@ function saddle()
 %     theta3 = [0 0 0];
 
     target = [2,1,0];
+%     index = 1;
+%     iteration=2;
     for t = 1:100
         [z, lamda, theta] = some_function(1, target, t, z, lamda, theta);
         [z, lamda, theta] = some_function(2, target, t, z, lamda, theta);
