@@ -15,13 +15,10 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
     bitrate = 6;
     ctrPacketLength = 200;
     packetLength = 500;
-    if abs(theta(index) - theta(target(index))) < 0.01 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.1 %rssi determination
         fprintf('change node')
-        if index == 1 || index == 2
-            target(1) = 3;
-            target(2) = 0;
-            target(3) = 1;
-        end
+
+        target = cal_distance(target, index);
 
 %         addpath soil equations
         
@@ -37,7 +34,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
 %         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
         syms a b
-        h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
+        h_constraint(a,b) = 3./2.*sqrt(a./4./(z(index)./50))-sqrt(b./4./(z(target(index))./50));
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 %         y = z(index) + theta(index);        %expect life time
@@ -49,7 +46,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
         laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
         z_new = z(index) - step_size * laplase;
-        z_new = round(min(max(z_new,0),30));
+        z_new = round(min(max(z_new,0),50));
     else
         z_new = double(z(index));
     end
@@ -62,7 +59,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
     L_gradient1 = subs(L_expectdiff,x,z_new);
 
     syms a b
-    h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
+    h_constraint(a,b) = 3./2.*sqrt(a./4./(z(index)./50))-sqrt(b./4./(z(target(index))./50));
     h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = abs(diff(h_constraint(a,b),a));
     h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
@@ -76,7 +73,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
     laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size * laplase;
-    z(index) = round(min(max(z(index),0),30));
+    z(index) = round(min(max(z(index),0),50));
 
     lamda(index, target(index)) = max((1-step_size^2 * delta)*lamda(index, target(index))+step_size * h_result, 0);
 end
