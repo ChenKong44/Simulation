@@ -1,6 +1,6 @@
 function [z, lamda, target, theta,L_result] = some_function(index, target, iteration, z, lamda, theta)
-    step_size = 0.008;
-    delta = 1e-2;
+    step_size = 0.001;
+    delta = 1e-4;
     
     if target(index) == 0
         return
@@ -8,17 +8,22 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     
     
 %     theta_old = theta(index);
-    theta(index) = rand();
-    max_clustersize = 50;
-    density1=0.7;
-    density2=0.8;
+    xmin=0.05;  %minimum moisture lv
+    xmax=0.25;   %max moisture lv
+    n=20;
+    x=xmin+rand(1,n)*(xmax-xmin);
+    theta(index) = x(randi([1,n]));
+    fprintf('theta is: %d\n',theta(index));
+    max_clustersize = 30;
+    density1=0.6;
+    density2 = 0.8;
 
     underground_cluster = sqrt(z(index)./4./(density1)).*0.05;
     aboveground_cluster = sqrt(z(index)./4./(density1)).*0.95;
     basedistance = 20;
 
-    addpath 'soil equations'\
-    [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,theta(index));
+    addpath 'soil equations'
+    [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,theta(index),6);
 
     Energy_transfer = 50*0.000000001;
     Energy_receive = 50*0.000000001;
@@ -33,13 +38,11 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 %     for t = 1:1:iteration
 %         Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
 %             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) ); 
-%     end
-
-    
+%     end    
 %     fprintf('%d\n',Energy_init);
-
 %     -iteration.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
-%             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) )
+%             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) 
+
     
     if abs(theta(index) - theta(target(index))) < 0.01 %rssi determination
         fprintf('change node')
@@ -65,7 +68,7 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 
 %         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
         syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density2)));
+        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density2)))-5;
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 %         y = z(index) + theta(index);        %expect life time
@@ -93,11 +96,11 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 %     fprintf('expected lifetime: %d\n',L_result(index));
 
     syms a b
-    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))-sqrt(b./4./(density2)));
+    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))-sqrt(b./4./(density2)))-5;
     h_result = abs(subs(h_constraint,{a,b},{z(index),z(target(index))}));
     h_constraintdiff = diff(h_constraint(a,b),a);
     h_gradient = abs(subs(h_constraintdiff,{a,b},{z(index),z(target(index))}));
-    fprintf('h_gradient: %d\n',h_gradient);
+%     fprintf('h_gradient: %d\n',h_gradient);
 
 
 %     y = z_new + theta(index);
@@ -108,9 +111,9 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 
     laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size .* laplase;
-    fprintf('laplase: %d\n',laplase);
+%     fprintf('laplase: %d\n',laplase);
     z(index) = min(max(z(index),0),max_clustersize);
 
     lamda(index, target(index)) = max((1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
-    fprintf('lamuda: %d\n',lamda(index, target(index)));
+%     fprintf('lamuda: %d\n',lamda(index, target(index)));
 end

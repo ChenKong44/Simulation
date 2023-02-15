@@ -1,4 +1,4 @@
-function [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground, aboveground,moisture)
+function [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground, aboveground,moisture,frequency)
 
 %   Input:
 %       prob      cluster size prob

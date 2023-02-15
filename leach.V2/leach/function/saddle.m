@@ -1,12 +1,12 @@
 function saddle()
-    z = [29 24 38 20];
+    z = [2 7 3 4];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
     z_spare4 = [];
     lamda = zeros(4,4);
     theta = [0 0 0 0];
-    iteration=100;
+    iteration= 100;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -45,11 +45,11 @@ function saddle()
         xlabel('Round','FontWeight','bold','FontSize',11,'FontName','Cambria');
         
         % Create ylabel
-        ylabel('sum of energy','FontWeight','bold','FontSize',11,...
+        ylabel('Cluster size','FontWeight','bold','FontSize',11,...
             'FontName','Cambria');
         
         % Create title
-        title('Sum of energy of nodes vs. round','FontWeight','bold','FontSize',12,...
+        title('Number of cluster members vs. round','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
         subplot(4,1,2);
         plot(x,z_spare2);
