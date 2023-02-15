@@ -1,8 +1,9 @@
 function saddle()
-    z = [22 15 13 20];
+    z = [29 24 38 20];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
+    z_spare4 = [];
     lamda = zeros(4,4);
     theta = [0 0 0 0];
     iteration=100;
@@ -27,13 +28,14 @@ function saddle()
         [z, lamda, target, theta] = some_function(2, target, t, z, lamda, theta);
         [z, lamda, target, theta] = some_function(3, target, t, z, lamda, theta);
         [z, lamda, target, theta] = some_function(4, target, t, z, lamda, theta);
-        fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
-        fprintf('z: %d %d %d %d\n',z(1), z(2), z(3), z(4));
-        z_spare=[z_spare,z(1)];
-        z_spare2=[z_spare2,z(2)];
-        z_spare3=[z_spare3,z(3)];
+%         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
+        fprintf('z: %d %d %d %d\n',round(z(1)), round(z(2)), round(z(3)), round(z(4)));
+        z_spare=[z_spare,round(z(1))];
+        z_spare2=[z_spare2,round(z(2))];
+        z_spare3=[z_spare3,round(z(3))];
+        z_spare4=[z_spare4,round(z(4))];
     end
-        subplot(3,1,1);
+        subplot(4,1,1);
         x=1:1:iteration;
         
         % Create plot
@@ -49,8 +51,10 @@ function saddle()
         % Create title
         title('Sum of energy of nodes vs. round','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
-        subplot(3,1,2);
+        subplot(4,1,2);
         plot(x,z_spare2);
-        subplot(3,1,3);
+        subplot(4,1,3);
         plot(x,z_spare3);
+        subplot(4,1,4);
+        plot(x,z_spare4);
     end

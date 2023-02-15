@@ -1,4 +1,4 @@
-function [L_ug, L_ab] = pathloss(underground, aboveground)
+function [L_ug, L_ab] = pathloss(underground, aboveground,moisture,frequency)
 % Create the node model randomly
 %   
 %   Input:
@@ -14,12 +14,12 @@ function [L_ug, L_ab] = pathloss(underground, aboveground)
 % Hossein Dehghan, hd.dehghan@gmail.com
 % Ver 1. 2/2013
 
-   [alpha, beta] = soilmodel(0.3);
+   [alpha, beta] = soilmodel(moisture,frequency);
    d_ug = underground;
    d_ag = aboveground;
 
-   b = alpha;
-   a = beta;
+   a = alpha;
+   b = beta;
     
    freq = 2.4.*10e8;   
 

@@ -15,6 +15,8 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
     bitrate = 6;
     ctrPacketLength = 200;
     packetLength = 500;
+
+    max_clustersize = 50;
     if abs(theta(index) - theta(target(index))) < 0.01 %rssi determination
         fprintf('change node')
         if index == 1 || index == 2
@@ -22,10 +24,12 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
             target(2) = 0;
             target(3) = 1;
         end
-
+        if target(index) == 0
+            return
+        end
 %         addpath soil equations
         
-        fprintf('%d\n',z(target(index)));
+        fprintf('%d\n',target(index));
 
         syms x
         L_expect(x) = Energy_init ./ ( ( (x-1)./ x ) .*(Energy_receive+Energy_transfer).* packetLength ./ bitrate+...
@@ -37,7 +41,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
 %         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
         syms a b
-        h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
+        h_constraint(a,b) = 3./2.*sqrt(a./4./(z(index)./50))-sqrt(b./4./(z(target(index))./50));
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 %         y = z(index) + theta(index);        %expect life time
@@ -49,7 +53,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
         laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
         z_new = z(index) - step_size * laplase;
-        z_new = round(min(max(z_new,0),30));
+        z_new = round(min(max(z_new,0),max_clustersize));
     else
         z_new = double(z(index));
     end
@@ -62,7 +66,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
     L_gradient1 = subs(L_expectdiff,x,z_new);
 
     syms a b
-    h_constraint(a,b) = 3./2.*abs(sqrt(a./4./(z(index)./50))-sqrt(b./4./z(target(index))));
+    h_constraint(a,b) = 3./2.*sqrt(a./4./(z(index)./50))-sqrt(b./4./(z(target(index))./50));
     h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = abs(diff(h_constraint(a,b),a));
     h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
@@ -76,7 +80,7 @@ function [z, lamda, target, theta] = some_function(index, target, iteration, z, 
 
     laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size * laplase;
-    z(index) = round(min(max(z(index),0),30));
+    z(index) = round(min(max(z(index),0),max_clustersize));
 
     lamda(index, target(index)) = max((1-step_size^2 * delta)*lamda(index, target(index))+step_size * h_result, 0);
 end
