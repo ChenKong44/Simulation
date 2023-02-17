@@ -13,7 +13,8 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
     theta(index) = x(randi([1,n]));
-    fprintf('theta is: %d\n',theta(index));
+%     fprintf('theta is: %d\n',theta(index));
+
     max_clustersize = 30;
     density1=0.6;
     density2 = 0.8;
@@ -35,11 +36,11 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     
     Energy_init = 0.5;
 
-%     for t = 1:1:iteration
-%         Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
-%             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) ); 
-%     end    
-%     fprintf('%d\n',Energy_init);
+    for t = 1:1:iteration
+        Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
+            ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) ); 
+    end    
+    fprintf('%d\n',Energy_init);
 %     -iteration.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
 %             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) 
 
@@ -66,11 +67,15 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 
         
 
-%         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density);
-        syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density2)))-5;
-        h_constraintdiff = abs(diff(h_constraint(a,b),a));
-        h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+        h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density1)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density1);
+        h_constraintdiff = abs(diff(h_constraint(x)));
+        h_gradient = subs(h_constraintdiff,x,z(index));
+
+%         syms a b
+%         h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density2)))-5;
+%         h_constraintdiff = abs(diff(h_constraint(a,b),a));
+%         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+
 %         y = z(index) + theta(index);        %expect life time
 %         grad1 = gradient(y);                % check gradient function 
 %         g = z(index) + z(target(index)) + theta(index) + theta(target(index));
@@ -94,12 +99,18 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     L_gradient1 = subs(L_expectdiff,x,z_new);
 
 %     fprintf('expected lifetime: %d\n',L_result(index));
+    
 
-    syms a b
-    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))-sqrt(b./4./(density2)))-5;
-    h_result = abs(subs(h_constraint,{a,b},{z(index),z(target(index))}));
-    h_constraintdiff = diff(h_constraint(a,b),a);
-    h_gradient = abs(subs(h_constraintdiff,{a,b},{z(index),z(target(index))}));
+    h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density1)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density1);
+    h_result = abs(subs(h_constraint,x,z(index)));
+    h_constraintdiff = abs(diff(h_constraint(x)));
+    h_gradient = subs(h_constraintdiff,x,z(index));
+
+%     syms a b
+%     h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))-sqrt(b./4./(density2)))-5;
+%     h_result = abs(subs(h_constraint,{a,b},{z(index),z(target(index))}));
+%     h_constraintdiff = diff(h_constraint(a,b),a);
+%     h_gradient = abs(subs(h_constraintdiff,{a,b},{z(index),z(target(index))}));
 %     fprintf('h_gradient: %d\n',h_gradient);
 
 
@@ -115,5 +126,5 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     z(index) = min(max(z(index),0),max_clustersize);
 
     lamda(index, target(index)) = max((1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
-%     fprintf('lamuda: %d\n',lamda(index, target(index)));
+    fprintf('lamuda: %d\n',lamda(index, target(index)));
 end
