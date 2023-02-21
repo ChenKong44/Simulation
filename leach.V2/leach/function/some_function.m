@@ -21,20 +21,22 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 
     underground_cluster = sqrt(z(index)./4./(density1)).*0.05;
     aboveground_cluster = sqrt(z(index)./4./(density1)).*0.95;
-    basedistance = 20;
+    basedistance = sqrt(z(index)./4./(density1))+sqrt(z(index)./4./(density2));
 
     addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,theta(index),6);
 
-    Energy_transfer = 50*0.000000001;
+    Energy_transfer_ch= (10.*log10(-Energy_transit_b./1e-3))*0.000000001;
+    Energy_transfer_cm = (10.*log10(-Energy_transit_cm./1e-3))*0.000000001;
     Energy_receive = 50*0.000000001;
     energy_system = 50*0.0000001;
 
-    br = bitrate;
-    ctrPacketLength = 200;
-    packetLength = 700;
+    brmax = bitrate;
+    ctrPacketLength = 51.*8;
+    packetLength = 51.*8;
     
     Energy_init = 0.5;
+    
 
 %     for t = 1:1:iteration
 %         Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
@@ -58,9 +60,10 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 %         fprintf('%d\n',z(target(index)));
 
         syms x
+        br = (x ./ (1 + 2 .* (x - 1))) .* (125000 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %         L_expect(x) = (0.4.*x-6).^2+8;
-        L_expect(x) = Energy_init ./ ( ( ((x-1)./ x) .*(Energy_receive+Energy_transfer) ).* packetLength ./ br+...
-            ( ctrPacketLength.*Energy_transfer./ ( x.* br ) )+ (energy_system./ x) );
+        L_expect(x) = Energy_init ./ ( ( (x-1)./ x ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
+        ctrPacketLength.*Energy_transfer_ch./ ( brmax ) );
         L_result(index) = subs(L_expect,x,z(index));
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
@@ -92,9 +95,10 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
     
     syms x
+    br = (x ./ (1 + 2 .* (x - 1))) .* (125000 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %     L_expect(x) = (0.4.*x-6).^2+8;
-    L_expect(x) = Energy_init ./ ( ( (x-1)./ x ) .*(Energy_receive+Energy_transfer).* packetLength ./ br+...
-        ctrPacketLength.*Energy_transfer./ ( x.* br ) );
+    L_expect(x) = Energy_init ./ ( ( (x-1)./ x ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
+        ctrPacketLength.*Energy_transfer_ch./ ( brmax ) );
     L_result(index) = subs(L_expect,x,z(index));
     L_expectdiff = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);
