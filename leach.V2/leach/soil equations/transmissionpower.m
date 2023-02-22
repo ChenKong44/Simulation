@@ -24,7 +24,7 @@ function [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedi
     cr = 4./5;
     snr = -2.5.*(sf-6)-5;
 
-    bitrate = ( sf.*bw.*cr )./ ( 2.^sf );
+    bitrate = (bw ./ (2.^sf)) .* (4 ./ (4 + cr));
     Energy_transit_b = 10.* log10(bw) + Noisefactor + snr- 174 - antennagain+ cableloss+ L_path_b;
     Energy_transit_cm = 10.* log10(bw) + Noisefactor + snr- 174 - antennagain+ cableloss+ L_path_cm;
 

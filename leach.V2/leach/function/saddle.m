@@ -1,12 +1,17 @@
 function saddle()
-    z = [15 21 18 13];
+    z = [37 21 41 32];
     z_spare = [];
     z_spare2 = [];
-    z_spare3 = [];
-    z_spare4 = [];
+%     z_spare3 = [];
+%     z_spare4 = [];
+
+    L_spare = [];
+    L_spare2 = [];
+
     lamda = zeros(4,4);
     theta = [0 0 0 0];
-    iteration= 100;
+    L_result = [0 0 0 0];
+    iteration= 500;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -23,17 +28,20 @@ function saddle()
     target = [2,1,3,4];
 %     index = 1;
 %     iteration=2;
-    for t = 1:iteration
-        [z, lamda, target, theta] = some_function(1, target, t, z, lamda, theta);
-        [z, lamda, target, theta] = some_function(2, target, t, z, lamda, theta);
-        [z, lamda, target, theta] = some_function(3, target, t, z, lamda, theta);
-        [z, lamda, target, theta] = some_function(4, target, t, z, lamda, theta);
+    for t = 1:1:iteration
+        [z, lamda, target, theta,L_result] = some_function(1, target, t, z, lamda, theta,L_result);
+        [z, lamda, target, theta,L_result] = some_function(2, target, t, z, lamda, theta,L_result);
+        [z, lamda, target, theta,L_result] = some_function(3, target, t, z, lamda, theta,L_result);
+        [z, lamda, target, theta,L_result] = some_function(4, target, t, z, lamda, theta,L_result);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',round(z(1)), round(z(2)), round(z(3)), round(z(4)));
+        fprintf('L_result: %d\n',L_result(1));
         z_spare=[z_spare,round(z(1))];
         z_spare2=[z_spare2,round(z(2))];
-        z_spare3=[z_spare3,round(z(3))];
-        z_spare4=[z_spare4,round(z(4))];
+        L_spare=[L_spare,round(L_result(1))];
+        L_spare2=[L_spare2,round(L_result(2))];
+%         z_spare3=[z_spare3,round(z(3))];
+%         z_spare4=[z_spare4,round(z(4))];
     end
         subplot(4,1,1);
         x=1:1:iteration;
@@ -52,9 +60,9 @@ function saddle()
         title('Number of cluster members vs. round','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
         subplot(4,1,2);
-        plot(x,z_spare2);
+        plot(x,L_spare);
         subplot(4,1,3);
-        plot(x,z_spare3);
+        plot(x,z_spare2);
         subplot(4,1,4);
-        plot(x,z_spare4);
+        plot(x,L_spare2);
     end
