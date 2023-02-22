@@ -63,7 +63,7 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
         br = (x ./ (1 + interference .* (x - 1))) .* (125 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %         L_expect(x) = (0.4.*x-6).^2+8;
         L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
-        ctrPacketLength.*Energy_transfer_ch./ ( brmax) );
+            ctrPacketLength.*Energy_transfer_ch./ ( brmax) );
         L_result(index) = subs(L_expect,x,z(index));
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
