@@ -19,7 +19,7 @@ function [alpha, beta] = soilmodel(moisture,frequency)
    mu_0 = 0.5;              %permeability in vacuum
    mu_r = 1;              %soil relative permeability
     
-   freq = frequency;    %frequency
+   freq = frequency.*1e6;    %frequency
    ro_b = 1.07;            %bulk density in grams per cubic centimeter
    ro_s = 2.66;            %specific gravity of the solid soil particles
    m_v = moisture;      %moisture level

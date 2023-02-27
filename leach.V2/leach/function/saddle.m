@@ -1,9 +1,9 @@
 function saddle()
-    z = [37 21 41 32];
+    z = [37 21 18 32];
     z_spare = [];
     z_spare2 = [];
-%     z_spare3 = [];
-%     z_spare4 = [];
+    z_spare3 = [];
+    z_spare4 = [];
 
     L_spare = [];
     L_spare2 = [];
@@ -11,7 +11,7 @@ function saddle()
     lamda = zeros(4,4);
     theta = [0 0 0 0];
     L_result = [0 0 0 0];
-    iteration= 500;
+    iteration= 1000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -38,10 +38,10 @@ function saddle()
         fprintf('L_result: %d\n',L_result(1));
         z_spare=[z_spare,round(z(1))];
         z_spare2=[z_spare2,round(z(2))];
-        L_spare=[L_spare,round(L_result(1))];
-        L_spare2=[L_spare2,round(L_result(2))];
-%         z_spare3=[z_spare3,round(z(3))];
-%         z_spare4=[z_spare4,round(z(4))];
+%         L_spare=[L_spare,round(L_result(1))];
+%         L_spare2=[L_spare2,round(L_result(2))];
+        z_spare3=[z_spare3,round(z(3))];
+        z_spare4=[z_spare4,round(z(4))];
     end
         subplot(4,1,1);
         x=1:1:iteration;
@@ -60,9 +60,9 @@ function saddle()
         title('Number of cluster members vs. round','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
         subplot(4,1,2);
-        plot(x,L_spare);
-        subplot(4,1,3);
         plot(x,z_spare2);
+        subplot(4,1,3);
+        plot(x,z_spare3);
         subplot(4,1,4);
-        plot(x,L_spare2);
+        plot(x,z_spare4);
     end

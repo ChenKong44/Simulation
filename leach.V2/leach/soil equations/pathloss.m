@@ -21,10 +21,10 @@ function [L_ug, L_ab] = pathloss(underground, aboveground,moisture,frequency)
    a = alpha;
    b = beta;
     
-   freq = 2.4.*10e8;   
+   freq = frequency;   
 
-   L_ug = 6.4 + 20.*log10(d_ug) + 20.*log10(b) + 8.69.*a.*d_ug;
-   L_ab = -147.6 + 20.*log10(d_ag) + 20.*log10(freq);
+   L_ug = 6.4 + 20.*log10(d_ug.*1e-3) + 20.*log10(b) + 8.69.*a.*d_ug.*1e-3;
+   L_ab = 32.45+20.*log10(d_ag)+20.*log10(freq);
    
   
 end

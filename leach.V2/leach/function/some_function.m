@@ -1,6 +1,6 @@
 function [z, lamda, target, theta,L_result] = some_function(index, target, iteration, z, lamda, theta,L_result)
-    step_size = 0.008;
-    delta = 1e1;
+    step_size = 0.1;
+    delta = 1e-1;
     
     if target(index) == 0
         return
@@ -17,23 +17,23 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 
     max_clustersize = 50;
     interference = 1;
-    density1=0.8;
+    density1=4.5;
 
     underground_cluster = sqrt(z(index)./4./(density1)).*0.05;
     aboveground_cluster = sqrt(z(index)./4./(density1)).*0.95;
-    basedistance = sqrt(z(index)./4./(density1))+sqrt(z(target(index))./4./(density1));
+    basedistance =  sqrt(z(index)./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
     addpath 'soil equations'
-    [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,theta(index),6);
+    [bitrate,Energy_transit_b,Energy_transit_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,theta(index),868);
 
-    Energy_transfer_ch= (10.*log10(-Energy_transit_b./1e-3))*0.000000001;
-    Energy_transfer_cm = (10.*log10(-Energy_transit_cm./1e-3))*0.000000001;
+    Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
+    Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
     Energy_receive = 50*0.000000001;
     energy_system = 50*0.0000001;
 
     brmax = bitrate;
-    ctrPacketLength = 51.*8;
-    packetLength = 51.*8;
+    ctrPacketLength = 32.*8;
+    packetLength = 32.*8;
     
     Energy_init = 0.5;
     
@@ -60,7 +60,7 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
 %         fprintf('%d\n',z(target(index)));
 
         syms x
-        br = (x ./ (1 + interference .* (x - 1))) .* (125 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+        br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %         L_expect(x) = (0.4.*x-6).^2+8;
         L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
         ctrPacketLength.*Energy_transfer_ch./ ( brmax) );
@@ -95,7 +95,7 @@ function [z, lamda, target, theta,L_result] = some_function(index, target, itera
     z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
     
     syms x
-    br = (x ./ (1 + interference .* (x - 1))) .* (125 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+    br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %     L_expect(x) = (0.4.*x-6).^2+8;
     L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
         ctrPacketLength.*Energy_transfer_ch./ ( brmax));
