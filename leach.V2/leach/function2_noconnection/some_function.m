@@ -52,7 +52,7 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
     if abs(theta(index) - theta(target(index))) < 0.0001 %rssi determination
         fprintf('change node \n')
 
-        target = cal_distance(target, index);
+%         target = cal_distance(target, index);
 
 %         if index == 1 || index == 2
 %             target(1) = 0;
@@ -66,8 +66,9 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
 %         addpath soil equations
         
 %         fprintf('%d\n',z(target(index)));
+        z_tem = z(target(index));
 
-        for t = 1:1:4
+        for t = 1:1:5
             syms x
             br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
     %         L_expect(x) = (0.4.*x-6).^2+8;
@@ -76,24 +77,19 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
             L_result(index) = subs(L_expect,x,z(index));
             L_expectdiff = diff(L_expect(x));
             L_gradient1 = subs(L_expectdiff,x,z(index));
-    
-            
-    % 
-    %         h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density1)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density1);
-    %         h_constraintdiff = diff(h_constraint(x));
-    %         h_gradient = subs(h_constraintdiff,x,z(index));
+   
     
             syms a b
             h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-5;
             h_constraintdiff = abs(diff(h_constraint(a,b),a));
-            h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+            h_gradient = subs(h_constraintdiff,{a,b},{z(index),z_tem});
     
     
             laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
             z_new = z(index) - step_size * laplase;
             z_new = min(max(z_new,0),max_clustersize);
         end 
-        iteration_delay(index) = iteration+4;
+        iteration_delay(index) = iteration_delay(index)+4;
     else
         z_new = double(z(index));
     end
