@@ -16,7 +16,7 @@ function saddle()
 
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
-    iteration= 1000;
+    iteration= 100;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -40,7 +40,7 @@ function saddle()
         [z, lamda, target, theta,L_result] = some_function(4, target, t, z, lamda, theta,L_result);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
-        fprintf('L_result: %d\n',L_result(1));
+%         fprintf('L_result: %d\n',L_result(1));
         z_spare=[z_spare,round(z(1))];
         z_spare2=[z_spare2,round(z(2))];
 %         L_spare=[L_spare,round(L_result(1))];

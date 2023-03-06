@@ -1,6 +1,6 @@
-function [z, lamda, target, theta,L_result,iteration_delay] = some_function(index, target, iteration, z, lamda, theta,L_result,iteration_delay)
-    step_size = 0.07;
-    delta = 1e-3;
+function [z, lamda, target, theta,L_result,iteration_delay,z_spare] = some_function(index, target, iteration, z, lamda, theta,L_result,iteration_delay,z_spare)
+    step_size = 0.065;
+    delta = 1e-1;
     
     if target(index) == 0
         return
@@ -13,9 +13,10 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
 
-    if mode(iteration,40)==0
+    if mod(iteration,10)==0
         theta(index) = x(randi([1,n]));
     end
+%     abs(theta(index) - theta(target(index))) < 0.035
 %     fprintf('theta is: %d\n',theta(index));
 
     max_clustersize = 50;
@@ -39,7 +40,6 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
     packetLength = 32.*8;
     
     Energy_init = 0.5;
-    
 
 %     for t = 1:1:iteration
 %         Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
@@ -47,25 +47,14 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
 %     end    
 %     fprintf('%d\n',Energy_init);
 
-
     
-    if abs(theta(index) - theta(target(index))) < 0.0001 %rssi determination
-        fprintf('change node \n')
-
-%         target = cal_distance(target, index);
-
-%         if index == 1 || index == 2
-%             target(1) = 0;
-%             target(2) = 3;
-%             target(3) = 2;
-%         end
+    if abs(theta(index) - theta(target(index))) < 0.035 %rssi determination
+        fprintf('change node1 \n')
+        
         if target(index) == 0
             return
         end
 
-%         addpath soil equations
-        
-%         fprintf('%d\n',z(target(index)));
         z_tem = z(target(index));
 
         for t = 1:1:5
@@ -88,8 +77,19 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
             laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
             z_new = z(index) - step_size * laplase;
             z_new = min(max(z_new,0),max_clustersize);
+            z_spare=[z_spare,round(z_new)];
         end 
-        iteration_delay(index) = iteration_delay(index)+4;
+        iteration_delay(index) = iteration_delay(index)+5;
+        target = cal_distance(target, index);
+
+%         target = cal_distance(target, index);
+
+
+
+%         addpath soil equations
+        
+%         fprintf('%d\n',z(target(index)));
+        
     else
         z_new = double(z(index));
     end
@@ -104,7 +104,7 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
     L_expectdiff = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);
 %     fprintf('L_result: %d\n',L_result(index));
-    fprintf('L_gradient: %.5f\n',L_gradient1);
+%     fprintf('L_gradient: %.5f\n',L_gradient1);
 
 %     fprintf('expected lifetime: %d\n',L_result(index));
     
@@ -119,9 +119,9 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
     h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = diff(h_constraint(a,b),a);
     h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
-
-    fprintf('h_gradient: %.5f\n',h_gradient);
-    fprintf('h_result: %.5f\n',h_result);
+% 
+%     fprintf('h_gradient: %.5f\n',h_gradient);
+%     fprintf('h_result: %.5f\n',h_result);
 
 
 %     y = z_new + theta(index);
@@ -132,9 +132,10 @@ function [z, lamda, target, theta,L_result,iteration_delay] = some_function(inde
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size .* laplase;
-    fprintf('laplase: %.5f\n',laplase);
+%     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),0),max_clustersize);
+    z_spare=[z_spare,round(z(index))];
 
     lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
-    fprintf('lamuda: %.5f\n',lamda(index, target(index)));
+%     fprintf('lamuda: %.5f\n',lamda(index, target(index)));
 end
