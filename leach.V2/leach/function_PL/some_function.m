@@ -1,6 +1,6 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.07;
-    delta = 1e-3;
+    step_size = 0.01;
+    delta = 1e-5;
     
     if target(index) == 0
         return
@@ -35,10 +35,10 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     energy_system = 50*0.0000001;
 
     brmax = bitrate;
-    ctrPacketLength = 32.*8; %12-256 bytes
-    packetLength = 32.*8;
+    ctrPacketLength = 15.*8; %12-256 bytes
+    packetLength = 15.*8;
     
-    Energy_init = 50;
+    Energy_init = 0.5;
     
 
 %     for t = 1:1:iteration
@@ -49,7 +49,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
@@ -64,8 +64,12 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
         syms x
         br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
-%         L_expect(x) = (0.4.*x-6).^2+8;
-        L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
+        if z(index) < 40
+            PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+        else
+            PL(x) = 0.000001.*x;
+        end 
+        L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* PL(x) ./ br+...
         ctrPacketLength.*Energy_transfer_ch./ ( brmax) );
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
@@ -77,7 +81,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         h_gradient = subs(h_constraintdiff,x,z(index));
 
         syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-3;
+        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-5;
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 
@@ -98,14 +102,19 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
     syms x
     br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
-%     L_expect(x) = (0.4.*x-6).^2+8;
-    L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
+    if z(index) < 40
+         PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+    else
+         PL(x) = 0.000001.*x;
+    end
+   
+    L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* PL(x) ./ br+...
         ctrPacketLength.*Energy_transfer_ch./ ( brmax));
     L_result(index) = subs(L_expect,x,round(z(index)));
     L_expectdiff = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);
 %     fprintf('L_result: %d\n',L_result(index));
-%     fprintf('L_gradient: %.5f\n',L_gradient1);
+    fprintf('L_gradient: %.5f\n',L_gradient1);
 
 %     fprintf('expected lifetime: %d\n',L_result(index));
     
@@ -117,12 +126,11 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     syms a b
     h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-3;
-    h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = diff(h_constraint(a,b),a);
     h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 % 
-%     fprintf('h_gradient: %.5f\n',h_gradient);
+    fprintf('h_gradient: %.5f\n',h_gradient);
 %     fprintf('h_result: %.5f\n',h_result);
 
 
@@ -134,9 +142,9 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size .* laplase;
-%     fprintf('laplase: %.5f\n',laplase);
+    fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),0),max_clustersize);
 
-    lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
-%     fprintf('lamuda: %.5f\n',lamda(index, target(index)));
+    lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * H_result(index), 0);
+    fprintf('lamuda: %.5f\n',lamda(index, target(index)));
 end

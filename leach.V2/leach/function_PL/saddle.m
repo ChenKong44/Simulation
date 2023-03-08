@@ -48,7 +48,7 @@ function saddle()
 %         z_spare4=[z_spare4,round(z(4))];
 
         L_spare=[L_spare,round(L_result(2))];
-        H_spare=[H_spare,H_result(2)];
+        H_spare=[H_spare,round(H_result(2))];
 %         L_spare2=[L_spare2,round(L_result(2))];
 
     end
