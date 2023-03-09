@@ -1,4 +1,13 @@
 
+x=2:1:50;
+z=2:1:50;
+lamuda1 = 0.08;
+lamuda2 = 0.09;
+
+step_size = 0.07;
+delta = 1e-3;
+
+
 
 %     theta_old = theta(index);
 xmin=0.05;  %minimum moisture lv
@@ -14,19 +23,19 @@ max_clustersize = 50;
 interference = 1;
 density1=4.5;
 
-syms x
+syms x z
 
-intraclustermembers = sqrt(20./4./(density1));
+intraclustermembers = sqrt(x./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
-basedistance =  sqrt(50./4./(density1))+sqrt(21./4./(density1)) ;
+basedistance =  sqrt(x./4./(density1))+sqrt(x./4./(density1)) ;
 
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
 
 Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
 Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
-Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
+Energy_transfer_intracm = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
 Energy_receive = 50*0.000000001;
 energy_system = 50*0.0000001;
 
@@ -42,13 +51,13 @@ Energy_init = 50;
 % PL_diff(x) = diff(PL(x));
 % br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 
-L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+L_expect(x) = ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax+...
+        ctrPacketLength.*Energy_transfer_ch./ ( brmax));
 L_expectdiff(x) = diff(L_expect(x));
 
-x=2:1:50;
+x=4:1:100;
 
-plot(x,L_expectdiff(x));
+plot(x,L_expect(x));
 
 xlabel('Cluster size','FontWeight','bold','FontSize',11,'FontName','Cambria');
         
