@@ -17,7 +17,7 @@ function saddle()
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 4000;
+    iteration= 3000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
