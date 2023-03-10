@@ -48,7 +48,7 @@ L_expectdiff(x) = diff(L_expect(x));
 
 x=2:1:50;
 
-plot(x,L_expectdiff(x));
+plot(x,L_expect(x));
 
 xlabel('Cluster size','FontWeight','bold','FontSize',11,'FontName','Cambria');
         
