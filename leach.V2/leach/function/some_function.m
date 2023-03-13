@@ -1,6 +1,6 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
     step_size = 0.08;
-    delta = 1e-3;
+    delta = 1e-1;
     
     if target(index) == 0
         return
@@ -20,11 +20,11 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     max_clustersize = 100;
     interference = 1;
-    density1=7;
+    density1=9;
 
 
     syms x
-    intraclustermembers = sqrt(35./4./(density1));
+    intraclustermembers = sqrt(40./4./(density1));
     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
@@ -113,8 +113,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     L_expectdiff(x) = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);
     L_gradient1 = double(L_gradient1);
-    fprintf('L_result: %d\n',L_result(index));
-    fprintf('L_gradient: %.5f\n',L_gradient1);
+%     fprintf('L_result: %d\n',L_result(index));
+%     fprintf('L_gradient: %.5f\n',L_gradient1);
 
 %     fprintf('expected lifetime: %d\n',L_result(index));
     
@@ -135,8 +135,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
         h_gradient = 0.0001;
     end
 % 
-    fprintf('h_gradient: %.5f\n',h_gradient);
-    fprintf('h_result: %.5f\n',h_result);
+%     fprintf('h_gradient: %.5f\n',h_gradient);
+%     fprintf('h_result: %.5f\n',h_result);
 
 
 %     y = z_new + theta(index);
@@ -147,9 +147,9 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size .* laplase;
-    fprintf('laplase: %.5f\n',laplase);
+%     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 
     lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
-    fprintf('lamuda: %.5f\n',lamda(index, target(index)));
+%     fprintf('lamuda: %.5f\n',lamda(index, target(index)));
 end

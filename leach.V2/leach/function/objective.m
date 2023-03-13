@@ -12,11 +12,11 @@ theta = x(randi([1,n]));
 
 max_clustersize = 100;
 interference = 1;
-density1=7;
+density1=9;
 
 syms x
 
-intraclustermembers = sqrt(35./4./(density1));
+intraclustermembers = sqrt(40./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
 basedistance =  sqrt(50./4./(density1))+sqrt(21./4./(density1)) ;
@@ -48,7 +48,7 @@ L_expectdiff(x) = diff(L_expect(x));
 
 x=2:1:100;
 
-plot(x,L_expect(x));
+plot(x,L_expect(x),'b-',x,L_expectdiff(x),'r-');
 
 xlabel('Cluster size','FontWeight','bold','FontSize',11,'FontName','Cambria');
         
