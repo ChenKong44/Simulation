@@ -10,13 +10,13 @@ theta = x(randi([1,n]));
 
 %     fprintf('theta is: %d\n',theta(index));
 
-max_clustersize = 50;
+max_clustersize = 100;
 interference = 1;
-density1=4.5;
+density1=7;
 
 syms x
 
-intraclustermembers = sqrt(20./4./(density1));
+intraclustermembers = sqrt(35./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
 basedistance =  sqrt(50./4./(density1))+sqrt(21./4./(density1)) ;
@@ -46,7 +46,7 @@ L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 L_expectdiff(x) = diff(L_expect(x));
 
-x=2:1:50;
+x=2:1:100;
 
 plot(x,L_expect(x));
 

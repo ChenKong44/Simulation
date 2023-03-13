@@ -1,5 +1,5 @@
-function [z, lamda, target, theta,L_result,iteration_delay,z_spare4] = some_function4(index, target, iteration, z, lamda, theta,L_result,iteration_delay,z_spare4)
-    step_size = 0.065;
+function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare4] = some_function4(index, target, iteration, z, lamda, theta,L_result,H_result,iteration_delay,z_spare4)
+    step_size = 0.08;
     delta = 1e-1;
     
     if target(index) == 0
@@ -140,6 +140,7 @@ function [z, lamda, target, theta,L_result,iteration_delay,z_spare4] = some_func
     z(index) = z_new - step_size .* laplase;
     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
+    z_spare4=[z_spare4,round(z(index))];
 
     lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
     fprintf('lamuda: %.5f\n',lamda(index, target(index)));

@@ -1,11 +1,14 @@
 % function saddle()
-    z = [37 21 25 32];
+clc;
+clear;
+    z = [85 71 75 82];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
     z_spare4 = [];
 
     L_spare = [];
+    L_spare2 = [];
     H_spare = [];
 
     xmin=0.05;  %minimum moisture lv
@@ -17,7 +20,7 @@
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 3000;
+    iteration= 500;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -49,14 +52,14 @@
 
         L_spare=[L_spare,round(L_result(2))];
         H_spare=[H_spare,H_result(2)];
-%         L_spare2=[L_spare2,round(L_result(2))];
+        L_spare2=[L_spare2,round(L_result(2))];
 
     end
         subplot(2,1,1);
         x=1:1:iteration;
         
         % Create plot
-        plot(x,z_spare,'b-',x,z_spare2,'r-');
+        plot(x,z_spare,'b-');
         
         legend('ClusterHead# 1','ClusterHead# 2')
     

@@ -1,4 +1,4 @@
-function saddle()
+% function saddle()
     z = [37 21 25 32];
     z_spare = [];
     z_spare2 = [];
@@ -7,6 +7,8 @@ function saddle()
 
     L_spare = [];
     L_spare2 = [];
+    H_spare = [];
+    H_spare2 = [];
 
     xmin=0.05;  %minimum moisture lv
     xmax=0.25;   %max moisture lv
@@ -16,7 +18,8 @@ function saddle()
 
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
-    iteration= 5000;
+    H_result = [0 0 0 0];
+    iteration= 3000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -35,17 +38,19 @@ function saddle()
 %     index = 1;
 %     iteration=2;
     for t = 1:1:iteration
-        [z, lamda, target, theta,L_result,iteration_delay,z_spare] = some_function(1, target, t, z, lamda, theta,L_result,iteration_delay,z_spare);
-        [z, lamda, target, theta,L_result,iteration_delay,z_spare2] = some_function2(2, target, t, z, lamda, theta,L_result,iteration_delay,z_spare2);
-        [z, lamda, target, theta,L_result,iteration_delay,z_spare3] = some_function3(3, target, t, z, lamda, theta,L_result,iteration_delay,z_spare3);
-        [z, lamda, target, theta,L_result,iteration_delay,z_spare4] = some_function4(4, target, t, z, lamda, theta,L_result,iteration_delay,z_spare4);
+        [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare] = some_function(1, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare);
+        [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = some_function2(2, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare2);
+        [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = some_function3(3, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare3);
+        [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare4] = some_function4(4, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare4);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
 %         z_spare=[z_spare,round(z(1))];
 %         z_spare2=[z_spare2,round(z(2))];
-%         L_spare=[L_spare,round(L_result(1))];
-%         L_spare2=[L_spare2,round(L_result(2))];
+        L_spare=[L_spare,round(L_result(1))];
+        L_spare2=[L_spare2,round(L_result(2))];
+        H_spare=[H_spare,H_result(1)];
+        H_spare2=[H_spare2,H_result(2)];
 %         z_spare3=[z_spare3,round(z(3))];
 %         z_spare4=[z_spare4,round(z(4))];
     end
@@ -74,4 +79,4 @@ function saddle()
         'FontName','Cambria');
 
 
-    end
+%     end
