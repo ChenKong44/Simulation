@@ -1,4 +1,4 @@
-function saddle()
+% function saddle()
     z = [37 21 25 32];
     z_spare = [];
     z_spare2 = [];
@@ -88,4 +88,4 @@ function saddle()
         % Create title
         title('Objective function & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
-    end
+%     end
