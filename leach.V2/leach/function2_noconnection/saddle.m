@@ -1,5 +1,7 @@
 % function saddle()
-    z = [37 21 25 32];
+clc;
+clear;
+    z = [20 20 20 20];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
@@ -38,6 +40,7 @@
 %     index = 1;
 %     iteration=2;
     for t = 1:1:iteration
+        fprintf('iteration #: %d\n',t);
         [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare] = some_function(1, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare);
         [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = some_function2(2, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare2);
         [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = some_function3(3, target, t, z, lamda, theta,L_result,H_result,iteration_delay,z_spare3);
