@@ -1,1 +1,2 @@
 100: 0.08,1e-1,density = 9, intra=40,-4
+25：0.08，1e-1，density=2.5 intra = 10,-4.5

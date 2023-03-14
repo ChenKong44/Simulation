@@ -18,13 +18,13 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
 %     fprintf('theta is: %d\n',theta(index));
 
-    max_clustersize = 50;
+    max_clustersize = 25;
     interference = 1;
-    density1=4.5;
+    density1=2.5;
 
 
     syms x
-    intraclustermembers = sqrt(20./4./(density1));
+    intraclustermembers = sqrt(10./4./(density1));
     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
@@ -82,7 +82,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         h_gradient = subs(h_constraintdiff,x,z(index));
 
         syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-3;
+        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.3;
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
         if h_gradient==0
@@ -125,7 +125,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     h_gradient = subs(h_constraintdiff,x,z(index));
 
     syms a b
-    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-3;
+    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.3;
     h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = diff(h_constraint(a,b),a);

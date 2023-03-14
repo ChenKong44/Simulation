@@ -12,14 +12,14 @@ theta = x(randi([1,n]));
 
 max_clustersize = 25;
 interference = 1;
-density1=1;
+density1=2.5;
 
 syms x
 
-intraclustermembers = sqrt(7./4./(density1));
+intraclustermembers = sqrt(10./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
-basedistance =  sqrt(15./4./(density1))+sqrt(12./4./(density1)) ;
+basedistance =  sqrt(21./4./(density1))+sqrt(18./4./(density1)) ;
 
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
