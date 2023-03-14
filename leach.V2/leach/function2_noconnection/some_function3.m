@@ -22,16 +22,16 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
+    overlap=4.4;
     
     syms x
     intraclustermembers = sqrt(20./4./(density1));
-    underground_cluster = sqrt(z(index)./4./(density1)).*0.05;
-    aboveground_cluster = sqrt(z(index)./4./(density1)).*0.95;
-    basedistance =  sqrt(z(index)./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
+    underground_cluster = sqrt(x./4./(density1)).*0.05;
+    aboveground_cluster = sqrt(x./4./(density1)).*0.95;
+    basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
     addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
-
 
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
     Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
@@ -52,7 +52,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
 %     fprintf('%d\n',Energy_init);
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.008 %rssi determination
         fprintf('change node1 \n')
         target = cal_distance(target, index);
         if target(index) == 0
@@ -62,7 +62,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
         z_tem = z(target(index));
 
         for t = 1:1:5
-            syms x
+
 %             br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
     %         L_expect(x) = (0.4.*x-6).^2+8;
             L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
@@ -73,7 +73,8 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
    
     
             syms a b
-            h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
+            h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-overlap;
+%             h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
             h_constraintdiff = abs(diff(h_constraint(a,b),a));
             h_gradient = subs(h_constraintdiff,{a,b},{z(index),z_tem});
             if h_gradient==0
@@ -85,17 +86,18 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
             z_new = z(index) - step_size * laplase;
             z_new = min(max(z_new,0),max_clustersize);
             z_spare3=[z_spare3,round(z_new)];
+%             lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
         end 
         iteration_delay(index) = iteration_delay(index)+5;
-        
+        target = cal_distance(target, index);
         
     else
         z_new = double(z(index));
     end
-    z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
+%     z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
 %     br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
     
-    syms x
+
     L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
     L_result(index) = subs(L_expect,x,z(index));
@@ -114,11 +116,11 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare3] = 
 %     h_gradient = subs(h_constraintdiff,x,z(index));
 
     syms a b
-    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
-    h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
+    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-overlap;
+    h_result = subs(h_constraint,{a,b},{z_new,z(target(index))});
     H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = diff(h_constraint(a,b),a);
-    h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+    h_gradient = subs(h_constraintdiff,{a,b},{z_new,z(target(index))});
 
     if h_gradient==0
         h_gradient = 0.0001;
