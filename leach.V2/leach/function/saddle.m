@@ -38,7 +38,7 @@ clear;
 %     index = 1;
 %     iteration=2;
     for t = 1:1:iteration
-        fprintf('iteration #: %d\n',z(1),t);
+        fprintf('iteration #: %d\n',t);
         [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result);
         [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result);
         [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result);
@@ -62,7 +62,7 @@ clear;
         % Create plot
         plot(x,z_spare,'b-');
         
-        legend('ClusterHead# 1','ClusterHead# 2')
+        legend('ClusterHead# 1')
     
         % Create xlabel
         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');

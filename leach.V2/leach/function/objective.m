@@ -10,16 +10,16 @@ theta = x(randi([1,n]));
 
 %     fprintf('theta is: %d\n',theta(index));
 
-max_clustersize = 100;
+max_clustersize = 25;
 interference = 1;
-density1=9;
+density1=1;
 
 syms x
 
-intraclustermembers = sqrt(40./4./(density1));
+intraclustermembers = sqrt(7./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
-basedistance =  sqrt(50./4./(density1))+sqrt(21./4./(density1)) ;
+basedistance =  sqrt(15./4./(density1))+sqrt(12./4./(density1)) ;
 
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
@@ -46,7 +46,7 @@ L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 L_expectdiff(x) = diff(L_expect(x));
 
-x=2:1:100;
+x=2:1:25;
 
 plot(x,L_expect(x),'b-',x,L_expectdiff(x),'r-');
 
