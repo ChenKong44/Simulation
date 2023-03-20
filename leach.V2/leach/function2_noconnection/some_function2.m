@@ -52,7 +52,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = 
 %     fprintf('%d\n',Energy_init);
 
     
-    if abs(theta(index) - theta(target(index))) < 0.008 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.02 %rssi determination
         fprintf('change node1 \n')
         
         if target(index) == 0
@@ -61,16 +61,14 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = 
 
         z_tem = z(target(index));
 
-        for t = 1:1:5
 
-            br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
-    %         L_expect(x) = (0.4.*x-6).^2+8;
-            L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-            ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-            L_result(index) = subs(L_expect,x,z(index));
-            L_expectdiff = diff(L_expect(x));
-            L_gradient1 = subs(L_expectdiff,x,z(index));
-   
+        L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+        L_result(index) = subs(L_expect,x,z(index));
+        L_expectdiff = diff(L_expect(x));
+        L_gradient1 = subs(L_expectdiff,x,z(index));
+
+        for t = 1:1:5
     
             syms a b
             h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-overlap;
@@ -94,7 +92,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = 
     else
         z_new = double(z(index));
     end
-%    z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
+   z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
     
 %     br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 
@@ -117,10 +115,10 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = 
 
     syms a b
     h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-overlap;
-    h_result = subs(h_constraint,{a,b},{z_new,z(target(index))});
+    h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
     H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
     h_constraintdiff = diff(h_constraint(a,b),a);
-    h_gradient = subs(h_constraintdiff,{a,b},{z_new,z(target(index))});
+    h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
 
     if h_gradient==0
         h_gradient = 0.0001;
