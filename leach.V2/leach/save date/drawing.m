@@ -11,11 +11,28 @@
 % yFit2 = polyval(coefficients2 , xFit2);
 
 % Plot everything.
-% plot(x_ori, z_spare2_ori, 'b.', 'MarkerSize', 15); % Plot training data.
+% plot(x,z_spare2,'-o'); % Plot training data.
 % hold on;
-plot(x2, double(z_spare2_noav), 'r-', 'LineWidth', 2); % Plot fitted line.
+
 % hold on;
 % plot(x2, double(z_spare2), 'y.', 'MarkerSize', 15); % Plot training data.
-hold on; % Set hold on so the next plot does not blow away the one we just drew.
-plot(x2_av, double(z_spare2), 'b-', 'LineWidth', 2); % Plot fitted line.
+
+plot(x, z_spare, 'b-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x_nocon, double(z_spare_nocon), 'r-', 'LineWidth', 2); % Plot fitted line.
+% 
+% hold on; % Set hold on so the next plot does not blow away the one we just drew.
+% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
+
+legend('ASSP','SSP')
+    
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Cluster size','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([0 60])

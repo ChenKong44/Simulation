@@ -54,37 +54,41 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare] = s
     
     if abs(theta(index) - theta(target(index))) < 0.02 %rssi determination
         fprintf('change node1 \n')
-           
-        
+
+        target = cal_distance(target, index);
         if target(index) == 0
             return
         end
 
         z_tem = z(target(index));
-        L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-        L_result(index) = subs(L_expect,x,z(index));
-        L_expectdiff = diff(L_expect(x));
-        L_gradient1 = subs(L_expectdiff,x,z(index));
+
+
+        
+%         lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
 
         for t = 1:1:5
-    
+            L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+            ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+            L_result(index) = subs(L_expect,x,z(index));
+            L_expectdiff = diff(L_expect(x));
+            L_gradient1 = subs(L_expectdiff,x,z(index));
+
             syms a b
             h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-overlap;
+            h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
             h_constraintdiff = abs(diff(h_constraint(a,b),a));
             h_gradient = subs(h_constraintdiff,{a,b},{z(index),z_tem});
             if h_gradient==0
                 h_gradient = 0.0001;
             end
     
-    
             laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
             z_new = z(index) - step_size * laplase;
             z_new = min(max(z_new,0),max_clustersize);
-            z_spare=[z_spare,round(z_new)];
+            z_spare=[z_spare,z_new];
+            lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
         end 
         iteration_delay(index) = iteration_delay(index)+5;
-        target = cal_distance(target, index);
         
     else
         z_new = double(z(index));
@@ -136,7 +140,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare] = s
     z(index) = z_new - step_size .* laplase;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
-    z_spare=[z_spare,round(z(index))];
+    z_spare=[z_spare,z(index)];
 
     lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
 %     fprintf('lamuda: %.5f\n',lamda(index, target(index)));
