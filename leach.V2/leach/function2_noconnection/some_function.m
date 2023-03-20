@@ -83,7 +83,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare] = s
             end
     
             laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
-            z_new = z(index) - step_size * laplase;
+            z_new = z(index);
             z_new = min(max(z_new,0),max_clustersize);
             z_spare=[z_spare,z_new];
             lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);

@@ -17,10 +17,10 @@
 % hold on;
 % plot(x2, double(z_spare2), 'y.', 'MarkerSize', 15); % Plot training data.
 
-plot(x, z_spare, 'b-', 'LineWidth', 2); % Plot fitted line.
+plot(x_ori, z_spare2_ori, 'b-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x_nocon, double(z_spare_nocon), 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(x2, z_spare2, 'r-', 'LineWidth', 2); % Plot fitted line.
 % 
 % hold on; % Set hold on so the next plot does not blow away the one we just drew.
 % plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
@@ -30,9 +30,9 @@ legend('ASSP','SSP')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
+xlim([0 1500])
 
 % Create ylabel
 ylabel('Cluster size','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 60])
+ylim([0 70])
