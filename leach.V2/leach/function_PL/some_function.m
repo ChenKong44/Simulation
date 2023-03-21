@@ -56,7 +56,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.01 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);

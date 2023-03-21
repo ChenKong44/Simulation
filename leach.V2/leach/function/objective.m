@@ -1,8 +1,8 @@
 
 
 %     theta_old = theta(index);
-xmin=0.05;  %minimum moisture lv
-xmax=0.25;   %max moisture lv
+xmin=0.35;  %minimum moisture lv
+xmax=0.55;   %max moisture lv
 n=20;
 x=xmin+rand(1,n)*(xmax-xmin);
 
@@ -38,15 +38,15 @@ Energy_init = 50;
     
 
 
-PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+% PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
 % PL_diff(x) = diff(PL(x));
 % br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 
-L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* PL ./ brmax+...
+L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 L_expectdiff(x) = diff(L_expect(x));
 
-x=2:1:25;
+x=2:1:50;
 
 plot(x,L_expect(x),'b-',x,L_expectdiff(x),'r-');
 

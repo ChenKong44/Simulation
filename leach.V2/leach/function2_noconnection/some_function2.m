@@ -52,7 +52,7 @@ function [z, lamda, target, theta,L_result,H_result,iteration_delay,z_spare2] = 
 %     fprintf('%d\n',Energy_init);
 
     
-    if abs(theta(index) - theta(target(index))) < 0.02 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.05 %rssi determination
         fprintf('change node1 \n')
 
         target = cal_distance(target, index);
