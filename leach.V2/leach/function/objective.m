@@ -12,7 +12,7 @@ theta = x(randi([1,n]));
 
 max_clustersize = 50;
 interference = 1;
-density1=4;
+density1=4.5;
 
 syms x
 

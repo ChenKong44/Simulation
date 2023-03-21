@@ -9,7 +9,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 %     theta_old = theta(index);
     xmin=0.05;  %minimum moisture lv
-    xmax=0.4;   %max moisture lv
+    xmax=0.25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
 
@@ -22,7 +22,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     max_clustersize = 50;
     interference = 1;
-    density1=5;
+    density1=4.5;
     coverage = 4.4;
 
 

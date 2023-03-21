@@ -16,23 +16,25 @@
 
 % hold on;
 % plot(x2, double(z_spare2), 'y.', 'MarkerSize', 15); % Plot training data.
-
-plot(x_ori, H_spare_ori, 'b-', 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(x_ori, H_spare2_2, 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(x_ori, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x_ori, H_spare2_5, 'y-', 'LineWidth', 2); % Plot fitted line.
+plot(x, z_spare2_15, 'b-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x_ori, z_spare2_45new, 'r-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x_ori, z_spare2_55, 'g-', 'LineWidth', 2); % Plot fitted line.
 
 % hold on;
 % plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
-% 
+% % 
 % hold on; % Set hold on so the next plot does not blow away the one we just drew.
 % plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
 
-legend('ori','m1','m2','m3')
+legend('Moisture range: 0.05-0.25','Moisture range: 0.15-0.35','Moisture range: 0.25-0.45','Moisture range: 0.35-0.55')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -41,4 +43,4 @@ xlim([0 2000])
 % Create ylabel
 ylabel('Cluster size','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 50])
+ylim([0 80])

@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.01;
+    step_size = 0.05;
     delta = 1e-1;
     
     if target(index) == 0

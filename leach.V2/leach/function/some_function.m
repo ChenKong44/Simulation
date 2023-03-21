@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.08;
+    step_size = 0.1;
     delta = 1e-1;
     
     if target(index) == 0
@@ -8,8 +8,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
     
 %     theta_old = theta(index);
-    xmin=0.15;  %minimum moisture lv
-    xmax=0.35;   %max moisture lv
+    xmin=0.05;  %minimum moisture lv
+    xmax=0.25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
 
