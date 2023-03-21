@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.1;
+    step_size = 0.01;
     delta = 1e-1;
     
     if target(index) == 0
@@ -9,7 +9,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 %     theta_old = theta(index);
     xmin=0.05;  %minimum moisture lv
-    xmax=0.2;   %max moisture lv
+    xmax=0.25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
 
@@ -22,7 +22,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     max_clustersize = 50;
     interference = 1;
-    density1=4;
+    density1=4.5;
     coverage = 4.4;
 
 
@@ -56,7 +56,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.01 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);

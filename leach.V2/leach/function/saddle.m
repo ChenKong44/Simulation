@@ -72,7 +72,7 @@ clear;
             'FontName','Cambria');
         
         % Create title
-        title('Number of cluster members vs. Iteration#','FontWeight','bold','FontSize',12,...
+        title('constraint1 vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
         subplot(2,1,2);
