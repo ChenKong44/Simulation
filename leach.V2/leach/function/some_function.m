@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.1;
+    step_size = 0.08;
     delta = 1e-1;
     
     if target(index) == 0
@@ -23,7 +23,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
-    coverage = 4.4;
+    coverage = 4;
 
 
     syms x

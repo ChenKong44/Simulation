@@ -18,17 +18,17 @@
 % plot(x2, double(z_spare2), 'y.', 'MarkerSize', 15); % Plot training data.
 
  % Plot fitted line.
-plot(x, z_spare2_ori, 'g-', 'LineWidth', 2); % Plot fitted line.
+plot(x, z_spare2_001, 'g-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x, z_spare2_4, 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(x, z_spare2_005, 'r-', 'LineWidth', 2); % Plot fitted line.
 
-% hold on;
-% 
-% plot(x, z_spare2_ori, 'b-', 'LineWidth', 2);
-% 
-% hold on;
-% plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
+hold on;
+
+plot(x, z_spare2_ori, 'b-', 'LineWidth', 2);
+
+hold on;
+plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 % hold on;
 % plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.

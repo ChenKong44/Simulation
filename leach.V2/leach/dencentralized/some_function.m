@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.05;
+    step_size = 0.08;
     delta = 1e-1;
     
     if target(index) == 0
@@ -23,7 +23,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
-    coverage = 4.4;
+    coverage = 3.5;
 
 
     syms x
@@ -87,6 +87,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
         syms a b
         h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
+        h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
         if h_gradient==0
            h_gradient = 0.0001;
@@ -100,7 +101,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
         laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
-        z_new = z(index) - step_size * laplase;
+        z_new = z(index) - step_size * L_gradient1-0.5.*h_result;
         z_new = min(max(z_new,0),max_clustersize);
     else
         z_new = double(z(index));
@@ -149,7 +150,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
-    z(index) = z_new - step_size .* laplase;
+    z(index) = z_new - step_size .* L_gradient1-0.5.*h_result;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 
