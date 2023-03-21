@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.08;
+    step_size = 0.01;
     delta = 1e-1;
     
     if target(index) == 0
@@ -20,14 +20,14 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
 %     fprintf('theta is: %d\n',theta(index));
 
-    max_clustersize = 100;
+    max_clustersize = 50;
     interference = 1;
-    density1=9;
-    coverage = 4;
+    density1=4.5;
+    coverage = 4.4;
 
 
     syms x
-    intraclustermembers = sqrt(40./4./(density1));
+    intraclustermembers = sqrt(20./4./(density1));
     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;

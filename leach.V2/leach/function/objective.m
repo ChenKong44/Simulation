@@ -10,13 +10,13 @@ theta = x(randi([1,n]));
 
 %     fprintf('theta is: %d\n',theta(index));
 
-max_clustersize = 25;
+max_clustersize = 50;
 interference = 1;
-density1=2.5;
+density1=4;
 
 syms x
 
-intraclustermembers = sqrt(10./4./(density1));
+intraclustermembers = sqrt(20./4./(density1));
 underground_cluster = sqrt(x./4./(density1)).*0.05;
 aboveground_cluster = sqrt(x./4./(density1)).*0.95;
 basedistance =  sqrt(21./4./(density1))+sqrt(18./4./(density1)) ;
@@ -38,11 +38,11 @@ Energy_init = 50;
     
 
 
-% PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
 % PL_diff(x) = diff(PL(x));
 % br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 
-L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* PL ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 L_expectdiff(x) = diff(L_expect(x));
 
