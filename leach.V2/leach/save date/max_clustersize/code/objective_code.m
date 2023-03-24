@@ -45,26 +45,26 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result = subs(L_expect(z),z,z_spare2_001);
-L_result1 = subs(L_expect(z),z,z_spare2_005);
-L_result2 = subs(L_expect(z),z,z_spare2_01);
+L_result = subs(L_expect(z),z,z_spare2_100);
+L_result1 = subs(L_expect(z),z,z_spare2_50);
+L_result2 = subs(L_expect(z),z,z_spare2_25);
 
 syms a b
 h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-h_result = subs(h_constraint,{a,b},{round(z_spare2_001),z_spare2_001});
-h_result1 = subs(h_constraint,{a,b},{round(z_spare2_005),z_spare2_005});
-h_result2 = subs(h_constraint,{a,b},{round(z_spare2_01),z_spare2_01});
+h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
+h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
+h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
 
  
-z=1:1:3000;
+z=1:1:1000;
 
-plot(z, H_spare_001, 'g-', 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(z, H_spare_005, 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result, 'g-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, H_spare_01, 'b-', 'LineWidth', 2);
+plot(z, L_result1, 'r-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_result2, 'b-', 'LineWidth', 2);
 % 
 % hold on;
 % plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
@@ -85,4 +85,4 @@ xlim([0 1000])
 % Create ylabel
 ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([-20 20])
+ylim([0 500])
