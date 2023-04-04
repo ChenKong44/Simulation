@@ -7,7 +7,22 @@ n=20;
 x=xmin+rand(1,n)*(xmax-xmin);
 
 % theta = x(randi([1,n]));
-theta = 0.1179;
+theta = x(randi([1,n]));
+
+zmin=0.03;  %minimum moisture lv
+zmax=0.06;   %max moisture lv
+n=20;
+z=zmin+rand(1,n)*(zmax-zmin);
+
+underground_prob = z(randi([1,n]));
+
+
+ymin=0.94;  %minimum moisture lv
+ymax=0.97;   %max moisture lv
+n=20;
+y=ymin+rand(1,n)*(ymax-ymin);
+
+aboveground_prob = 1-underground_prob;
 
 %     fprintf('theta is: %d\n',theta(index));
 
@@ -19,8 +34,8 @@ coverage = 4;
 syms z
 
 intraclustermembers = sqrt(20./4./(density1));
-underground_cluster = sqrt(z./4./(density1)).*0.05;
-aboveground_cluster = sqrt(z./4./(density1)).*0.95;
+underground_cluster = sqrt(z./4./(density1)).*underground_prob;
+aboveground_cluster = sqrt(z./4./(density1)).*aboveground_prob;
 basedistance =  sqrt(40./4./(density1))+sqrt(39./4./(density1)) ;
 
 addpath 'soil equations'
@@ -45,44 +60,55 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result = subs(L_expect(z),z,z_spare2_001);
-L_result1 = subs(L_expect(z),z,z_spare2_005);
-L_result2 = subs(L_expect(z),z,z_spare2_01);
+L_result1 = double(subs(L_expect(z),z,z_spare2));
+L_result2 = double(subs(L_expect(z),z,z_spare22));
+L_result3 = double(subs(L_expect(z),z,z_spare23));
 
 syms a b
 h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-h_result = subs(h_constraint,{a,b},{round(z_spare2_001),z_spare2_001});
-h_result1 = subs(h_constraint,{a,b},{round(z_spare2_005),z_spare2_005});
-h_result2 = subs(h_constraint,{a,b},{round(z_spare2_01),z_spare2_01});
+% h_result = subs(h_constraint,{a,b},{round(z_spare2_001),z_spare2_001});
+% h_result1 = subs(h_constraint,{a,b},{round(z_spare2_005),z_spare2_005});
+% h_result2 = subs(h_constraint,{a,b},{round(z_spare2_01),z_spare2_01});
 
- 
 z=1:1:3000;
+z_spare=[];
+L_result=[];
 
-plot(z, h_result, 'g-', 'LineWidth', 2); % Plot fitted line.
-
+for t=1:1:3000
+    z_spare(t)=(z_spare2(t)+z_spare22(t)+z_spare23(t))./3;
+    L_result(t)=(L_result3(t)+L_result2(t)+L_result1(t))./3;
+end
+plot(z,z_spare, 'k-', 'LineWidth', 2); % Plot fitted line.
 hold on;
-plot(z, h_result1, 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result, 'k:', 'LineWidth', 2); % Plot fitted line.
 
-hold on;
-plot(z, h_result2, 'b-', 'LineWidth', 2);
+% b=1:1:50;
+% L_result = subs(L_expect(z),z,b);
+% plot(b, L_result, 'g-', 'LineWidth', 2); % Plot fitted line.
+
+% hold on;
+% plot(z, h_result1, 'r-', 'LineWidth', 2); % Plot fitted line.
 % 
 % hold on;
-% plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
-
-% hold on;
-% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
+% plot(z, h_result2, 'b-', 'LineWidth', 2);
 % % 
-% hold on; % Set hold on so the next plot does not blow away the one we just drew.
-% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
-grid on;
-
-legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
-    
-% Create xlabel
-xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
-
-% Create ylabel
-ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
-    'FontName','Cambria');
-ylim([-20 20])
+% % hold on;
+% % plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
+% 
+% % hold on;
+% % plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
+% % % 
+% % hold on; % Set hold on so the next plot does not blow away the one we just drew.
+% % plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
+% grid on;
+% 
+% legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
+%     
+% % Create xlabel
+% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+% xlim([0 1000])
+% 
+% % Create ylabel
+% ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
+%     'FontName','Cambria');
+% ylim([-20 20])

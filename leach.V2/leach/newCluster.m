@@ -1,5 +1,6 @@
-function clusterModel = newCluster(netArch, nodeArch, ...
-                        clusterFunParam, p_numnode)
+% function clusterModel = newCluster(netArch, nodeArch, ...
+%                         clusterFunParam, p_numnode)
+function clusterModel = newCluster(netArch, nodeArch,clusterFunParam)                        
 % Create the network architecture with desired parameters
 %   
 %   Input:
@@ -26,14 +27,14 @@ function clusterModel = newCluster(netArch, nodeArch, ...
     end
     clusterModel.nodeArch = nodeArch;
     
-    if ~exist('p_numnode','var')
-        numnode = 100; 
-        p = 1 / numnode;
-    else
-        p = p_numnode;
-    end
+%     if ~exist('p_numnode','var')
+%         numnode = 100; 
+%         p = 1 / numnode;
+%     else
+%         p = p_numnode;
+%     end
     %p = Probability of a cluster size
-    clusterModel.p          = p;
+    clusterModel.p          = 0.001;
     
     % run the clustering algorithm
     addpath Cluster % put the clustering algorithm in the cluster folder

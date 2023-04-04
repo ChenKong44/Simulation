@@ -40,11 +40,13 @@ function clusterModel = dissEnergyNonCH(clusterModel, roundArch)
             minDisCH =  cluster.no(loc);
             
             if (minDis > d0)
-                nodeArch.node(i).energy = nodeArch.node(i).energy - ...
-                    ctrPacketLength * ETX + Emp * packetLength * (minDis ^ 4);
+                nodeArch.node(i).energy = 1;
+%                 nodeArch.node(i).energy = nodeArch.node(i).energy - ...
+%                     ctrPacketLength * ETX + Emp * packetLength * (minDis ^ 4);
             else
-                nodeArch.node(i).energy = nodeArch.node(i).energy - ...
-                    ctrPacketLength * ETX + Efs * packetLength * (minDis ^ 2);
+                nodeArch.node(i).energy = 0;
+%                 nodeArch.node(i).energy = nodeArch.node(i).energy - ...
+%                     ctrPacketLength * ETX + Efs * packetLength * (minDis ^ 2);
             end
             %Energy dissipated
             if(minDis > 0)
