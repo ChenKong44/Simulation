@@ -11,17 +11,17 @@ theta = 0.1179;
 
 %     fprintf('theta is: %d\n',theta(index));
 
-max_clustersize = 100;
+max_clustersize = 25;
 interference = 1;
-density1=9;
+density1=2.5;
 coverage = 4;
 
 syms z
 
-intraclustermembers = sqrt(40./4./(density1));
+intraclustermembers = sqrt(10./4./(density1));
 underground_cluster = sqrt(z./4./(density1)).*0.05;
 aboveground_cluster = sqrt(z./4./(density1)).*0.95;
-basedistance =  sqrt(80./4./(density1))+sqrt(78./4./(density1)) ;
+basedistance =  sqrt(15./4./(density1))+sqrt(16./4./(density1)) ;
 
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
@@ -47,16 +47,52 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 % L_result = subs(L_expect(z),z,z_spare2_100);
 % L_result1 = subs(L_expect(z),z,z_spare2_50);
-% L_result2 = subs(L_expect(z),z,z_spare2_25);
+L_result2 = subs(L_expect(z),z,z_spare2_25);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
 % h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
 % h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
 % h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
-
+for t = 1:1:1000
+    z_spare_difference(t) = 81-z_spare2_100(t);
+    z_spare_difference1(t) = 40-z_spare2_50(t);
+    z_spare_difference2(t) = 18-z_spare2_25(t);
+end
  
 z=1:1:1000;
+
+subplot(1,3,1)
+
+plot(z, z_spare2_100, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_spare2_50, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+% hold on;
+% plot(z, L_result2, 'b-', 'LineWidth', 2);
+
+hold on;
+plot(z, z_spare2_25, 'k:', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Cluster Size','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([0 120])
+
+legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+
+title('Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+subplot(1,3,2)
 
 plot(z, L_result, 'k--', 'LineWidth', 2); % Plot fitted line.
 
@@ -69,15 +105,8 @@ plot(z, L_result1, 'k-', 'LineWidth', 2); % Plot fitted line.
 hold on;
 plot(z, L_result2, 'k:', 'LineWidth', 2); % Plot fitted line.
 
-% hold on;
-% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
-% % 
-% hold on; % Set hold on so the next plot does not blow away the one we just drew.
-% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
-
-legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
-    
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 1000])
@@ -86,3 +115,50 @@ xlim([0 1000])
 ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
 ylim([-10 200])
+
+legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+
+title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+
+subplot(1,3,3)
+plot(z, z_spare_difference, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_spare_difference1, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+% hold on;
+% plot(z, L_result2, 'b-', 'LineWidth', 2);
+
+hold on;
+plot(z, z_spare_difference2, 'k:', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Standard Error','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([-5 100])
+
+legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+
+title('Standard Error vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+
+% hold on;
+% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
+% % 
+% hold on; % Set hold on so the next plot does not blow away the one we just drew.
+% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
+
+
+    
+

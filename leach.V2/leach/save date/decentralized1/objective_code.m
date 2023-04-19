@@ -45,15 +45,15 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result = subs(L_expect(z),z,z_spare2_100);
-L_result1 = subs(L_expect(z),z,z_spare2_50);
-L_result2 = subs(L_expect(z),z,z_spare2_25);
+% L_result = subs(L_expect(z),z,z_spare2_100);
+% L_result1 = subs(L_expect(z),z,z_spare2_50);
+% L_result2 = subs(L_expect(z),z,z_spare2_25);
 
-syms a b
-h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
-h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
-h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
+% syms a b
+% h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
+% h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
+% h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
+% h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
 
  
 z=1:1:1000;
@@ -80,9 +80,9 @@ legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
+xlim([0 700])
 
 % Create ylabel
 ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 500])
+ylim([10 50])
