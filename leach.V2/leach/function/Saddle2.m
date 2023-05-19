@@ -1,6 +1,8 @@
-% function saddle()
-clc;
-clear;
+function Saddle2(clusterModel, clusterFunParam)
+    nodeArch = clusterModel.nodeArch;
+    cm_cm_distance = nodeArch.sumdistance;
+    iteration = clusterFunParam(1); % round number
+
     z = [20 20 20 20];
     z_spare = [];
     z_spare2 = [];
@@ -20,7 +22,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 3000;
+%     iteration= 3000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -39,10 +41,10 @@ clear;
 %     iteration=2;
     for t = 1:1:iteration
         fprintf('iteration #: %d\n',t);
-        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result,cm_cm_distance);
+        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result,cm_cm_distance);
+        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result,cm_cm_distance);
+        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result,cm_cm_distance);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
@@ -92,4 +94,4 @@ clear;
         % Create title
         title('Objective function & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
-%     end
+end

@@ -1,4 +1,4 @@
-function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,cm_cm_distance)
+function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
     step_size = 0.08;
     delta = 1e-1;
     
@@ -23,13 +23,13 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
-    coverage = 4;
+    coverage = 4.4;
 
 
     syms x
     intraclustermembers = sqrt(20./4./(density1));
-    underground_cluster = cm_cm_distance.*0.05;
-    aboveground_cluster = cm_cm_distance.*0.95;
+    underground_cluster = sqrt(x./4./(density1)).*0.05;
+    aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
     addpath 'soil equations'
@@ -84,13 +84,14 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         h_constraintdiff = diff(h_constraint(x));
 %         h_gradient = subs(h_constraintdiff,x,z(index));
 
-        syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-        h_constraintdiff = abs(diff(h_constraint(a,b),a));
-        h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
-        if h_gradient==0
-           h_gradient = 0.0001;
-        end
+%         syms a b
+%         h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
+%         h_constraintdiff = abs(diff(h_constraint(a,b),a));
+%         h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
+%         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+%         if h_gradient==0
+%            h_gradient = 0.0001;
+%         end
 
 %         y = z(index) + theta(index);        %expect life time
 %         grad1 = gradient(y);                % check gradient function 
@@ -99,8 +100,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         laplase = grad1 + (lamda(index,target(index)) + lamda(target(index),index)) * grad2;
 
 
-        laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
-        z_new = z(index) - step_size * laplase;
+%         laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
+        z_new = z(index) - step_size * L_gradient1-0.1.*(z(index)-z(target(index)));
         z_new = min(max(z_new,0),max_clustersize);
     else
         z_new = double(z(index));
@@ -122,21 +123,16 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     fprintf('expected lifetime: %d\n',L_result(index));
     
 
-%     h_constraint(x) = 6.4 +20.*log(3.*sqrt(x./4./density1)./2 )+20.*log(theta(index))+13.035.*sqrt(x./4./density1);
-%     h_result = subs(h_constraint,x,z(index));
-%     h_constraintdiff = diff(h_constraint(x));
-%     h_gradient = subs(h_constraintdiff,x,z(index));
-
-    syms a b
-    h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-    h_result = subs(h_constraint,{a,b},{z_new,z(target(index))});
-    H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
-    h_constraintdiff = diff(h_constraint(a,b),a);
-    h_gradient = subs(h_constraintdiff,{a,b},{z_new,z(target(index))});
-
-    if h_gradient==0
-        h_gradient = 0.0001;
-    end
+%     syms a b
+%     h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
+%     h_result = subs(h_constraint,{a,b},{z_new,z(target(index))});
+%     H_result(index) = subs(h_constraint,{a,b},{z(index),z(target(index))});
+%     h_constraintdiff = diff(h_constraint(a,b),a);
+%     h_gradient = subs(h_constraintdiff,{a,b},{z_new,z(target(index))});
+% 
+%     if h_gradient==0
+%         h_gradient = 0.0001;
+%     end
 % 
 %     fprintf('h_gradient: %.5f\n',h_gradient);
 %     fprintf('h_result: %.5f\n',h_result);
@@ -148,11 +144,11 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     grad2 = 0.3;                % check gradient function 
     
 
-    laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
-    z(index) = z_new - step_size .* laplase;
+%     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
+    z(index) = z_new - step_size .* L_gradient1-0.1.*(z_new-z(target(index)));
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 
-    lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
+%     lamda(index, target(index)) = max( (1-(step_size) .* delta).*lamda(index, target(index))+step_size * h_result, 0);
 %     fprintf('lamuda: %.5f\n',lamda(index, target(index)));
 end
