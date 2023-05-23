@@ -60,12 +60,12 @@ z_spare
 z=1:1:1000;
 
 figure;
-plot(z, z_spare2, 'k-', 'LineWidth', 2); % Plot fitted line.
+plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
-figure;
-plot(x2, L_result, 'k:', 'LineWidth', 2);
+hold on;
+plot(x4, z_spare4, 'k:', 'LineWidth', 2);
 
-figure;
+hold on;
 plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 
@@ -84,9 +84,9 @@ legend('SSGD','SGD,low moisture','SGD,high moisture')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
+xlim([0 300])
 
 % Create ylabel
 ylabel('cluster size','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([10 50])
+ylim([15 45])

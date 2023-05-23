@@ -7,7 +7,7 @@ n=20;
 x=xmin+rand(1,n)*(xmax-xmin);
 
 % theta = x(randi([1,n]));
-theta = 0.1179;
+theta = 0.125;
 
 %     fprintf('theta is: %d\n',theta(index));
 
@@ -19,8 +19,8 @@ coverage = 4;
 syms z
 
 intraclustermembers = sqrt(20./4./(density1));
-underground_cluster = sqrt(z./4./(density1)).*0.05;
-aboveground_cluster = sqrt(z./4./(density1)).*0.95;
+underground_cluster = sqrt(z./4./(density1)).*0.054;
+aboveground_cluster = sqrt(z./4./(density1)).*0.946;
 basedistance =  sqrt(40./4./(density1))+sqrt(39./4./(density1)) ;
 
 addpath 'soil equations'
@@ -45,7 +45,7 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-% L_result = subs(L_expect(z),z,z_spare2_100);
+
 % L_result1 = subs(L_expect(z),z,z_spare2_50);
 % L_result2 = subs(L_expect(z),z,z_spare2_25);
 
@@ -56,9 +56,9 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 % h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
 
  
-z=1:1:1000;
-
-plot(z, z_spare2, 'k-', 'LineWidth', 2); % Plot fitted line.
+x=1:1:50;
+L_result = subs(L_expect(z),z,x);
+plot(x, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 % hold on;
 % plot(z, L_result1, 'r-', 'LineWidth', 2); % Plot fitted line.
@@ -76,13 +76,13 @@ plot(z, z_spare2, 'k-', 'LineWidth', 2); % Plot fitted line.
 % plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
 
-legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
-    
-% Create xlabel
-xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 700])
-
-% Create ylabel
-ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
-    'FontName','Cambria');
-ylim([10 50])
+% legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
+%     
+% % Create xlabel
+% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+% xlim([0 700])
+% 
+% % Create ylabel
+% ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
+%     'FontName','Cambria');
+% ylim([10 50])

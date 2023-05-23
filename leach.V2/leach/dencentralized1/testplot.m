@@ -1,0 +1,141 @@
+
+%     theta_old = theta(index);
+% xmin=0.05;  %minimum moisture lv
+% xmax=0.25;   %max moisture lv
+% n=20;
+% x=xmin+rand(1,n)*(xmax-xmin);
+m = [0.185 0.165 0.155 0.185 0.1565 0.15325 0.1425 0.112 0.18325 0.149 0.1035 0.184];
+energy_spare=[];
+energy_spare2=[];
+% theta = x(randi([1,n]));theta = 0.185;
+
+zmin=0.03;  %minimum moisture lv
+zmax=0.06;   %max moisture lv
+n=20;
+z=zmin+rand(1,n)*(zmax-zmin);
+
+underground_prob = z(randi([1,n]));
+
+
+ymin=0.94;  %minimum moisture lv
+ymax=0.97;   %max moisture lv
+n=20;
+y=ymin+rand(1,n)*(ymax-ymin);
+
+aboveground_prob = 1-underground_prob;
+
+%     fprintf('theta is: %d\n',theta(index));
+
+max_clustersize = 50;
+interference = 1;
+density1=4.5;
+coverage = 4;
+
+for t =1:1:12
+syms z
+
+intraclustermembers = sqrt(20./4./(density1));
+underground_cluster = sqrt(z./4./(density1)).*0.054;
+aboveground_cluster = sqrt(z./4./(density1)).*0.946;
+basedistance =  sqrt(40./4./(density1))+sqrt(38./4./(density1)) ;
+
+addpath 'soil equations'
+[bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,m(t),868);
+
+Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
+Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
+Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
+Energy_receive = 50*0.000000001;
+
+brmax = bitrate;
+ctrPacketLength = 32.*8; %12-256 bytes
+packetLength = 32.*8;
+
+Energy_init = 50;
+    
+
+
+% PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+% PL_diff(x) = diff(PL(x));
+% br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+
+L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+
+    L_result1 = double(subs(L_expect(z),29));
+    L_result2 = double(subs(L_expect(z),z,target_spare(t)));
+    energy_spare=[energy_spare,L_result1 ];
+    energy_spare2=[energy_spare2,L_result2];
+end
+    energy_spare = [energy_spare 0];
+    energy_spare2 = [energy_spare2 0];
+for t=1:1:12
+    energy_spare(t+1)=energy_spare(t+1)+energy_spare(t);
+    energy_spare2(t+1)=energy_spare2(t+1)+energy_spare2(t);
+end
+
+
+energy_spare(13)=[];
+energy_spare2(13)=[];
+% L_result2 = double(subs(L_expect(z),z,z_spare22));
+% L_result3 = double(subs(L_expect(z),z,z_spare23));
+
+% syms a b
+% h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
+% h_result = subs(h_constraint,{a,b},{round(z_spare2_001),z_spare2_001});
+% h_result1 = subs(h_constraint,{a,b},{round(z_spare2_005),z_spare2_005});
+% h_result2 = subs(h_constraint,{a,b},{round(z_spare2_01),z_spare2_01});
+
+
+% z_spare=[];
+% L_result=[];
+
+% for t=1:1:3000
+%     z_spare(t)=(z_spare2(t)+z_spare22(t)+z_spare23(t))./3;
+%     L_result(t)=(L_result3(t)+L_result2(t)+L_result1(t))./3;
+% end
+
+% subplot(2,1,1);
+x= [1 2 3 4 5 6 7 8 9 10 11 12];
+
+% Create plot
+plot(x,energy_spare,'k--o',x,energy_spare2,'k-*');
+set(gca, 'XTick',x) 
+legend('SSGD without moisture detection','SSGD with moisture detection')
+
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xticklabels({'24-Jun','25-Jun','26-Jun','27-Jun','28-Jun','29-Jun','30-Jun','01-Jul','02-Jul','03-Jul','04-Jul','05-Jul'})
+
+% Create ylabel
+ylabel('Cumulative Energy Cost','FontWeight','bold','FontSize',11,...
+'FontName','Cambria');
+yticklabels({'0','50','100','150','200','250','300','350'})
+ylim([0 350])
+
+yyaxis right
+plot(x,m,'k--x','LineWidth', 2);
+ylabel('Moisture level','FontWeight','bold','FontSize',11,...
+'FontName','Cambria');
+ax = gca;
+ax.YColor = 'k';
+ylim([0 0.24])
+
+grid on;
+
+% subplot(2,1,2);
+% 
+% % Create plot
+% plot(p,x,'b-');
+% 
+% legend('Moisture')
+% 
+% % Create xlabel
+% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+% 
+% % Create ylabel
+% ylabel('Moisture Level','FontWeight','bold','FontSize',11,...
+% 'FontName','Cambria');
+
+
+

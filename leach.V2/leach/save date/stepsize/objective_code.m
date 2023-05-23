@@ -7,7 +7,7 @@ n=20;
 x=xmin+rand(1,n)*(xmax-xmin);
 
 % theta = x(randi([1,n]));
-theta = 0.1179;
+theta = 0.1;
 
 %     fprintf('theta is: %d\n',theta(index));
 

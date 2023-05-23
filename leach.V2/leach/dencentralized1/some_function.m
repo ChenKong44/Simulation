@@ -8,16 +8,17 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
     
 %     theta_old = theta(index);
-    xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
-    n=20;
-    x=xmin+rand(1,n)*(xmax-xmin);
+%     xmin=0.05;  %minimum moisture lv
+%     xmax=0.25;   %max moisture lv
+%     n=20;
+%     x=xmin+rand(1,n)*(xmax-xmin);
+% 
+%   
+% 
+%     if mod(iteration,10)==0
+%         theta(index) = x(randi([1,n]));
+%     end
 
-  
-
-    if mod(iteration,10)==0
-        theta(index) = x(randi([1,n]));
-    end
 %     fprintf('theta is: %d\n',theta(index));
 
     max_clustersize = 50;
@@ -28,8 +29,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     syms x
     intraclustermembers = sqrt(20./4./(density1));
-    underground_cluster = sqrt(x./4./(density1)).*0.05;
-    aboveground_cluster = sqrt(x./4./(density1)).*0.95;
+    underground_cluster = sqrt(x./4./(density1)).*0.054;
+    aboveground_cluster = sqrt(x./4./(density1)).*0.946;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
     addpath 'soil equations'
@@ -56,7 +57,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.0003 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
@@ -145,7 +146,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 
 %     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
-    z(index) = z_new - step_size .* L_gradient1-0.1.*(z_new-z(target(index)));
+%     z(index) = z_new - step_size .* L_gradient1-0.1.*(z_new-z(target(index)));
+    z(index) = z_new - step_size .* L_gradient1;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 
