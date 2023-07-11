@@ -45,26 +45,26 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result = subs(L_expect(z),z,z_spare2_100);
-L_result1 = subs(L_expect(z),z,z_spare2_50);
-L_result2 = subs(L_expect(z),z,z_spare2_25);
+L_result11 = subs(L_expect(z),z,z_spare2_100);
+L_result122 = subs(L_expect(z),z,z_spare2_50);
+L_result33 = subs(L_expect(z),z,z_spare2_25);
 
 syms a b
 h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
-h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
-h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
+L_result11 = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
+h_result22 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
+h_result33= subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
 
  
 z=1:1:1000;
 
-plot(z, L_result, 'g-', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result1, 'r-', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result1, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result2, 'b-', 'LineWidth', 2);
+plot(z, L_result2, 'k:', 'LineWidth', 2);
 % 
 % hold on;
 % plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
@@ -76,13 +76,14 @@ plot(z, L_result2, 'b-', 'LineWidth', 2);
 % plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
 
-legend('Step Size: 0.01','Step Size: 0.05','Step Size: 0.1')
+legend('Cluster size: 25','Cluster size: 50','Cluster size: 100')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 1000])
 
 % Create ylabel
-ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
-    'FontName','Cambria');
-ylim([0 500])
+ylabel('Energy consumption: $E_{ch}(z,m_{v})$','Interpreter','latex');
+ylim([0 150])
+
+title('(a) Energy consumption Vs Iteration');
