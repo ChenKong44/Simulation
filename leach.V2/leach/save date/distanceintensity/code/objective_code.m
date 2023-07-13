@@ -11,17 +11,17 @@ theta = 0.1179;
 
 %     fprintf('theta is: %d\n',theta(index));
 
-max_clustersize = 25;
+max_clustersize = 50;
 interference = 1;
-density1=2.5;
+density1=4.5;
 coverage = 4;
 
 syms z
 
-intraclustermembers = sqrt(10./4./(density1));
+intraclustermembers = sqrt(20./4./(density1));
 underground_cluster = sqrt(z./4./(density1)).*0.05;
 aboveground_cluster = sqrt(z./4./(density1)).*0.95;
-basedistance =  sqrt(15./4./(density1))+sqrt(16./4./(density1)) ;
+basedistance =  sqrt(40./4./(4.5))+sqrt(39./4./(4.5)) ;
 
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
@@ -45,35 +45,43 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-% L_result = subs(L_expect(z),z,z_spare2_100);
-% L_result1 = subs(L_expect(z),z,z_spare2_50);
-L_result2 = subs(L_expect(z),z,z_spare2_25);
+L_result = subs(L_expect(z),z,z_spare2_4);
+L_result1 = subs(L_expect(z),z,z_spare2_ori);
+L_result2 = subs(L_expect(z),z,z_spare2_5);
 
 syms a b
-h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-h_result = subs(h_constraint,{a,b},{round(z_spare2_100),z_spare2_100});
-h_result1 = subs(h_constraint,{a,b},{round(z_spare2_50),z_spare2_50});
-h_result2 = subs(h_constraint,{a,b},{round(z_spare2_25),z_spare2_25});
-for t = 1:1:1000
-    z_spare_difference(t) = 81-z_spare2_100(t);
-    z_spare_difference1(t) = 40-z_spare2_50(t);
-    z_spare_difference2(t) = 18-z_spare2_25(t);
+h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
+h_result = subs(h_constraint,{a,b},{z_spare_4,z_spare2_4});
+h_result1 = subs(h_constraint,{a,b},{z_spare_ori,z_spare2_ori});
+h_result2 = subs(h_constraint,{a,b},{z_spare_5,z_spare2_5});
+z_spare_difference = zeros(1, 10);  % Preallocate z_spare_difference array
+z_spare_difference1 = zeros(1, 10);
+z_spare_difference2 = zeros(1, 10);
+for h = 1:1:10   % Loop over h from 1 to 100 with a step size of 1
+    for t = 1:100:1000   % Loop over t from 1 to 1000 with a step size of 10
+        index = (t-1)/100 + 1;   % Calculate the corresponding index in z_spare_difference
+        z_spare_difference(index) = abs(40 - z_spare2_4(t));
+        z_spare_difference1(index) = abs(40 - z_spare2_ori(t));
+        z_spare_difference2(index) = abs(40 - z_spare2_5(t));
+    end
 end
+
+
  
 z=1:1:1000;
+x=1:1:3000;
+y=1:1:2280;
 
+figure;
 subplot(1,3,1)
 
-plot(z, z_spare2_100, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(x, z_spare2_4, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare2_50, 'k-', 'LineWidth', 2); % Plot fitted line.
-
-% hold on;
-% plot(z, L_result2, 'b-', 'LineWidth', 2);
+plot(x, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare2_25, 'k:', 'LineWidth', 2); % Plot fitted line.
+plot(x, z_spare2_5, 'k:', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD')
@@ -83,9 +91,9 @@ xlim([0 1000])
 
 % Create ylabel
 ylabel('Cluster size: $z$','Interpreter','latex');
-ylim([0 120])
+ylim([0 100])
 
-legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+legend('Intensity: 4','Intensity: 4.5','Intensity: 5')
 
 title('(a) Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -93,16 +101,13 @@ title('(a) Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
 
 subplot(1,3,2)
 
-plot(z, L_result, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(x, L_result, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result1, 'k-', 'LineWidth', 2); % Plot fitted line.
-
-% hold on;
-% plot(z, L_result2, 'b-', 'LineWidth', 2);
+plot(x, L_result1, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result2, 'k:', 'LineWidth', 2); % Plot fitted line.
+plot(x, L_result2, 'k:', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
@@ -112,9 +117,9 @@ xlim([0 1000])
 
 % Create ylabel
 ylabel('Energy consumption: $E_{ch}(z,m_{v})$','Interpreter','latex');
-ylim([-10 200])
+ylim([0 100])
 
-legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+legend('Intensity: 4','Intensity: 4.5','Intensity: 5')
 
 title('(b) Energy consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -122,16 +127,16 @@ title('(b) Energy consumption vs. Iteration#','FontWeight','bold','FontSize',12,
 
 
 subplot(1,3,3)
-plot(z, z_spare_difference, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(x, h_result, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare_difference1, 'k-', 'LineWidth', 2); % Plot fitted line.
+plot(x, h_result1, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x, h_result2, 'k:', 'LineWidth', 2);
 
 % hold on;
-% plot(z, L_result2, 'b-', 'LineWidth', 2);
-
-hold on;
-plot(z, z_spare_difference2, 'k:', 'LineWidth', 2); % Plot fitted line.
+% plot(z, z_spare_difference2, 'k:', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
@@ -141,13 +146,32 @@ xlim([0 1000])
 
 % Create ylabel
 ylabel('Relative energy consumption gap: $\frac{||(E_{c}(z,m_{v})) - (E_{c}(z^*,m_{v}))||}{||E_{c}(z^*,m_{v})||}$','Interpreter','latex');
-ylim([-5 100])
+ylim([-3 3])
 
-legend('Cluster size: 100','Cluster size: 50','Cluster size: 25')
+legend('Intensity: 4','Intensity: 4.5','Intensity: 5')
 
 title('(c) Relative energy consumption gap vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
+figure;
+x=1:1:10;
+y=[z_spare_difference;z_spare_difference1;z_spare_difference2];
+bar(x,y)
+
+grid on;
+legend('Intensity: 4','Intensity: 4.5','Intensity: 5')
+
+% Create xlabel
+xlabel('Days','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 10])
+
+% Create ylabel
+ylabel('Relative energy consumption gap: $\frac{||(E_{c}(z,m_{v})) - (E_{c}(z^*,m_{v}))||}{||E_{c}(z^*,m_{v})||}$','Interpreter','latex');
+ylim([-1 25])
+
+
+title('(c) Relative energy consumption gap vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
 
 
 % hold on;
