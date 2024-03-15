@@ -11,8 +11,8 @@ clear;
     L_spare2 = [];
     H_spare = [];
 
-    xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
+    xmin=5;  %minimum moisture lv
+    xmax=25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
     theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
@@ -20,7 +20,7 @@ clear;
     tmin=0.045;  %minimum moisture lv
     tmax=0.055;   %max moisture lv
     n=20;
-    t=tmin+rand(1,n)*(tmax-tmin);
+    temp=tmin+rand(1,n)*(tmax-tmin);
 
     underground_prob = t(randi([1,n]));
 
