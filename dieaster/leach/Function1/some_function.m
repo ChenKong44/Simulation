@@ -18,10 +18,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
 
    
-  
 
-    
-%     fprintf('theta is: %d\n',theta(index));
 
     max_clustersize = 50;
     interference = 1;
@@ -35,7 +32,6 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     syms x
     intraclustermembers = 2;
-%     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = 5;
     basedistance =  30 ;
 
@@ -45,22 +41,12 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3);
     Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3);
     Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3);
-    Energy_receive = 50*0.000000001;
-%     energy_system = 50*0.0000001;
+    Energy_receive = (10.^(20./10).*1e-3);
 
     brmax = bitrate;
     ctrPacketLength = 32.*8; %12-256 bytes
     packetLength = 32.*8;
     
-%     Energy_init = 50;
-    
-
-%     for t = 1:1:iteration
-%         Energy_init = Energy_init-t.*( ( ((z(index)-1)./ z(index)) .*(Energy_receive+Energy_transfer) ).* packetLength ./ bitrate+...
-%             ( ctrPacketLength.*Energy_transfer./ ( z(index).* bitrate ) )+ (energy_system./ z(index)) ); 
-%     end    
-%     fprintf('%d\n',Energy_init);
-
 
     
     if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
@@ -72,15 +58,12 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
             return
         end
 
-%         addpath soil equations
-        
-%         fprintf('%d\n',z(target(index)));
+% -----------------------------------
+% time of one transfer: 0.3146
+% ------------------------------------
 
-        
-        br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
-%         L_expect(x) = (0.4.*x-6).^2+8;
-        L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+    
+        L_expect(x) = (brmax.*31.46)./[9.*(Energy_receive+Energy_transfer_cm).* 31.46 +31.46.*(Energy_transfer_ch+Energy_receive)];
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
         L_gradient1 = double(L_gradient1);
@@ -91,13 +74,13 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         h_constraintdiff = diff(h_constraint(x));
 %         h_gradient = subs(h_constraintdiff,x,z(index));
 
-        syms a b
-        h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
-        h_constraintdiff = abs(diff(h_constraint(a,b),a));
-        h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
-        if h_gradient==0
-           h_gradient = 0.0001;
-        end
+%         syms a b
+%         h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
+%         h_constraintdiff = abs(diff(h_constraint(a,b),a));
+%         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
+%         if h_gradient==0
+%            h_gradient = 0.0001;
+%         end
 
 %         y = z(index) + theta(index);        %expect life time
 %         grad1 = gradient(y);                % check gradient function 
@@ -106,7 +89,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         laplase = grad1 + (lamda(index,target(index)) + lamda(target(index),index)) * grad2;
 
 
-        laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
+        laplase = L_gradient1;
         z_new = z(index) - step_size * laplase;
         z_new = min(max(z_new,0),max_clustersize);
     else
