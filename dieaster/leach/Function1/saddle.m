@@ -1,7 +1,7 @@
 % function saddle()
 clc;
 clear;
-    z = [20 20 20 20];
+    z = [10 10 10 10];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
@@ -22,7 +22,7 @@ clear;
     n=20;
     temp=tmin+rand(1,n)*(tmax-tmin);
 
-    underground_prob = t(randi([1,n]));
+    underground_prob = temp(randi([1,n]));
 
 
     ymin=0.945;  %minimum moisture lv

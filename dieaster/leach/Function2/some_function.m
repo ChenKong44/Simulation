@@ -31,17 +31,17 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     syms x
     intraclustermembers = sqrt(20./4./(density1));
-    underground_cluster = sqrt(x./4./(density1)).*0.05;
+%     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
-    addpath 'soil equations'
-    [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
+%     addpath 'soil equations'
+    [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance, aboveground_cluster,intraclustermembers,theta(index),868,35);
 
-    Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
-    Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
-    Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
-    Energy_receive = 50*0.000000001;
+    Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3);
+    Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3);
+    Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3);
+    Energy_receive = 20;
 %     energy_system = 50*0.0000001;
 
     brmax = bitrate;
@@ -73,7 +73,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %         fprintf('%d\n',z(target(index)));
 
         
-        br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+%         br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %         L_expect(x) = (0.4.*x-6).^2+8;
         L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
