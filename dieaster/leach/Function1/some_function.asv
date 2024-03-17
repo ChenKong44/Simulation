@@ -36,7 +36,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     Energy_transfer_ch= (10.^((Energy_transit_b+x)./10).*1e-3);
 %     Energy_transfer_cm = (10.^((Energy_transit_cm+x)./10).*1e-3);
 %     Energy_transfer_intracms = (10.^((Energy_transit_cm_cm+x)./10).*1e-3);
-    Energy_receive = (10.^(30./10).*1e-3);
+    Energy_receive = (10.^(10./10).*1e-3);
 
     brmax = bitrate;
     
@@ -54,7 +54,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 % ------------------------------------
 
     
-        L_expect(x) = (brmax.*log(1+(Energy_transfer_cm./L_path_cm)).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_ch).* 31.46 +31.46.*(Energy_transfer_cm+Energy_receive));
+        L_expect(x) = (brmax.*log(1+(Energy_transfer_cm./L_path_cm)).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_cm).* 31.46 +31.46.*(Energy_transfer_ch+Energy_receive));
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
         L_gradient1 = double(L_gradient1);
@@ -67,7 +67,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     
     syms x
-    L_expect(x) = (brmax.*log(1+(Energy_transfer_cm./L_path_cm)).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_ch).* 31.46 +31.46.*(Energy_transfer_cm+Energy_receive));
+    L_expect(x) = (brmax.*(Energy_transfer_cm./L_path_cm).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_cm).* 31.46 +31.46.*(Energy_transfer_ch+Energy_receive));
     L_result(index) = double(subs(L_expect,x,z(index)));
     L_expectdiff(x) = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);

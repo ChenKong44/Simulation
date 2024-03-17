@@ -1,4 +1,4 @@
-function [bitrate,Energy_transit_b,Energy_transit_cm,L_path_cm,L_path_b] = transmissionpower(basedistance, aboveground,mean_CMS_distance,moisture,frequency,temperature)
+function [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground, aboveground,mean_CMS_distance,moisture,frequency)
 
 %   Input:
 %       prob      cluster size prob
@@ -9,14 +9,14 @@ function [bitrate,Energy_transit_b,Energy_transit_cm,L_path_cm,L_path_b] = trans
 %       transEnergy Enery for transferring of each bit (ETX)
 %       recEnergy   Enery for receiving of each bit (ETX)
 
-    [L_ag] = pathloss(aboveground,moisture,frequency,temperature);
-    L_path_cm = L_ag;
+    [L_ug, L_ab] = pathloss(underground, aboveground,moisture,frequency);
+    L_path_cm = L_ab+ L_ug;
 
-    [L_ag] = pathloss(mean_CMS_distance,moisture,frequency,temperature);
-    L_path_cm_cm = L_ag;
+    [L_ug, L_ab] = pathloss(mean_CMS_distance.*0.158, mean_CMS_distance.*0.9,moisture,frequency);
+    L_path_cm_cm = L_ug;
     
-    [L_ag] = pathloss(basedistance,moisture,frequency,temperature);
-    L_path_b = L_ag;
+    [L_ug, L_ab] = pathloss(basedistance.*0.03, basedistance.*0.97,moisture,frequency);
+    L_path_b = L_ab+ L_ug;
 
     antennagain = 2.15;%antenna gain
     cableloss = 10;%calbe loss

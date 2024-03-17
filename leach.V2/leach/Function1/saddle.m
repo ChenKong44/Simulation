@@ -1,7 +1,7 @@
 % function saddle()
 clc;
 clear;
-    z = [20 20 20 20];
+    z = [0.001 0.001 0.001 0.001];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];

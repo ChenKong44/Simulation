@@ -25,7 +25,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
     max_clustersize = 50;
     interference = 1;
-    density1=4;
+    density1=4.5;
     coverage = 4.4;
 
 
@@ -35,7 +35,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(4.5))+sqrt(z(target(index))./4./(4.5)) ;
 
-    addpath 'soil equations'
+%     addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
 
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
