@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,aboveground_prob)
-    step_size = 0.008;
+    step_size = 0.08;
     
     if target(index) == 0
         return
@@ -36,7 +36,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     Energy_transfer_ch= (10.^((Energy_transit_b+x)./10).*1e-3);
 %     Energy_transfer_cm = (10.^((Energy_transit_cm+x)./10).*1e-3);
 %     Energy_transfer_intracms = (10.^((Energy_transit_cm_cm+x)./10).*1e-3);
-    Energy_receive = (10.^(30./10).*1e-3);
+    Energy_receive = (10.^(5./10).*1e-3);
 
     brmax = bitrate;
     
@@ -66,7 +66,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
 
     
-    syms x
+%     syms x
     L_expect(x) = (brmax.*log(1+(Energy_transfer_cm./L_path_cm)).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_ch).* 31.46 +31.46.*(Energy_transfer_cm+Energy_receive));
     L_result(index) = double(subs(L_expect,x,z(index)));
     L_expectdiff(x) = diff(L_expect(x));
