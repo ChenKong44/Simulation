@@ -54,7 +54,7 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 % EE_result1 = subs(EE_expect1(z),z,z_spare3);
 % EE_result2 = subs(EE_expect1(z),z,z_spare4);
 
-transmission(z) = z.*brmax.*0.03932./L_expect(z);
+transmission(z) = (z.*brmax.*0.03932)./L_expect(z);
 
 L_result = subs(L_expect(z),z,z_spare2_ori);
 L_result1 = subs(L_expect(z),z,z_spare3);
@@ -88,7 +88,7 @@ legend('SSGD','SGD,low moisture','SGD,high moisture')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 300])
+xlim([0 800])
 
 % Create ylabel
 ylabel('cluster size','FontWeight','bold','FontSize',11,...
@@ -133,12 +133,12 @@ grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
+xlim([0 800])
 
 % Create ylabel
 ylabel('Standard Error','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 90])
+ylim([0 110])
 
 title('Standard Error vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
