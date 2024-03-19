@@ -1,7 +1,7 @@
 % function saddle()
 clc;
 clear;
-    z = [20 20 20 20];
+    z = [30 30 30 30];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
@@ -11,8 +11,8 @@ clear;
     L_spare2 = [];
     H_spare = [];
 
-    xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
+    xmin=5;  %minimum moisture lv
+    xmax=25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
     theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
@@ -20,9 +20,9 @@ clear;
     tmin=0.045;  %minimum moisture lv
     tmax=0.055;   %max moisture lv
     n=20;
-    t=tmin+rand(1,n)*(tmax-tmin);
+    temp=tmin+rand(1,n)*(tmax-tmin);
 
-    underground_prob = t(randi([1,n]));
+    underground_prob = temp(randi([1,n]));
 
 
     ymin=0.945;  %minimum moisture lv
@@ -31,13 +31,13 @@ clear;
     y=ymin+rand(1,n)*(ymax-ymin);
 
 %     aboveground_prob = y(randi([1,n]));
-    aboveground_prob = 1-underground_prob;
 
+    aboveground_prob = 1-underground_prob;
 
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 3000;
+    iteration= 5000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -56,10 +56,10 @@ clear;
 %     iteration=2;
     for t = 1:1:iteration
         fprintf('iteration #: %d\n',t);
-        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
+        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result,aboveground_prob);
+        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result,aboveground_prob);
+        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result,aboveground_prob);
+        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result,aboveground_prob);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
@@ -89,7 +89,7 @@ clear;
             'FontName','Cambria');
         
         % Create title
-        title('Function1 vs. Iteration#','FontWeight','bold','FontSize',12,...
+        title('Function2 vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
         subplot(2,1,2);
@@ -107,6 +107,6 @@ clear;
             'FontName','Cambria');
         
         % Create title
-        title('Objective function & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
+        title('Objective function2 & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 %     end

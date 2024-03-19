@@ -48,11 +48,12 @@ L_result = subs(L_expect(z),z,z_spare2);
 
 z_spare_difference = [];
 
-for t = 1:1:1000
-    z_spare_difference(t) = 40-z_spare2(t);
-end
-% L_result1 = subs(L_expect(z),z,z_spare3);
-% L_result2 = subs(L_expect(z),z,z_spare2);
+% for t = 1:1:1000
+%     z_spare_difference(t) = 40-z_spare2(t);
+% end
+
+L_result1 = subs(L_expect(z),z,z_spare3);
+L_result2 = subs(L_expect(z),z,z_spare2);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
@@ -63,6 +64,13 @@ end
  
 z=1:1:1000;
 subplot(1,3,1)
+plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x4, z_spare4, 'k:', 'LineWidth', 2);
+
+hold on;
+plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 plot(z, z_spare2, 'k-', 'LineWidth', 2); % Plot fitted line.
 

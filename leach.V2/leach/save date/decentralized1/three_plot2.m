@@ -44,11 +44,16 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result = subs(L_expect(z),z,z_spare2);
+L_result = subs(L_expect(z),z,z_spare2_ori);
 
-% z_spare
-% L_result1 = subs(L_expect(z),z,z_spare3);
-% L_result2 = subs(L_expect(z),z,z_spare2);
+% z_spare_difference = [];
+
+% for t = 1:1:1000
+%     z_spare_difference(t) = 40-z_spare2(t);
+% end
+
+L_result1 = subs(L_expect(z),z,z_spare3);
+L_result2 = subs(L_expect(z),z,z_spare4);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
@@ -59,7 +64,7 @@ L_result = subs(L_expect(z),z,z_spare2);
  
 z=1:1:1000;
 
-figure;
+subplot(1,3,1);
 plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
@@ -68,16 +73,6 @@ plot(x4, z_spare4, 'k:', 'LineWidth', 2);
 hold on;
 plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
-
-% 
-% hold on;
-% plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
-
-% hold on;
-% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
-% % 
-% hold on; % Set hold on so the next plot does not blow away the one we just drew.
-% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
 grid on;
 
 legend('SSGD','SGD,low moisture','SGD,high moisture')
@@ -90,3 +85,57 @@ xlim([0 300])
 ylabel('cluster size','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
 ylim([15 45])
+
+subplot(1,3,2)
+
+plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x3, L_result1, 'k:', 'LineWidth', 2);
+
+hold on;
+plot(x4, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 800])
+
+% Create ylabel
+ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([0 90])
+
+title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+
+subplot(1,3,3)
+plot(z, z_spare_difference, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Standard Error','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([-5 50])
+
+title('Standard Error vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+% 
+% hold on;
+% plot(x, z_spare2_01, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+% hold on;
+% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
+% % 
+% hold on; % Set hold on so the next plot does not blow away the one we just drew.
+% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
+

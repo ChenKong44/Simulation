@@ -1,6 +1,17 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,aboveground_prob)
-    step_size = 0.8;
-    
+%     step_size = 0.8;
+    if iteration > 1000
+        step_size = 0.6;
+    elseif iteration > 2000
+        step_size = 0.2;
+    elseif iteration > 3000
+        step_size = 0.08;
+    elseif iteration > 4000
+        step_size = 0.001;
+    else
+        step_size = 0.8;   
+    end
+
     if target(index) == 0
         return
     end
