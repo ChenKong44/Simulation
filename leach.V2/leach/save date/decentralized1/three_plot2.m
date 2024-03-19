@@ -25,6 +25,9 @@ basedistance =  sqrt(40./4./(density1))+sqrt(39./4./(density1)) ;
 addpath 'soil equations'
 [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
 
+% Energy_transfer_ch1= (10.^((abs(Energy_transit_b)+z)./10).*1e-3)*0.0000001;
+% Energy_transfer_cm1 = (10.^((abs(Energy_transit_cm)+z)./10).*1e-3)*0.0000001;
+
 Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
 Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
 Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
@@ -44,16 +47,22 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+% EE_expect1(z) = (brmax.*log(1+(Energy_transfer_cm1./L_path_cm)).*16.*31.46)./(15.*(Energy_receive+Energy_transfer_ch1).* 31.46 +31.46.*(Energy_transfer_cm1+Energy_receive));
+% 
+% 
+% EE_result = subs(EE_expect1(z),z,z_spare2_ori);
+% EE_result1 = subs(EE_expect1(z),z,z_spare3);
+% EE_result2 = subs(EE_expect1(z),z,z_spare4);
+
+transmission(z) = z.*brmax.*0.03932./L_expect(z);
+
 L_result = subs(L_expect(z),z,z_spare2_ori);
-
-% z_spare_difference = [];
-
-% for t = 1:1:1000
-%     z_spare_difference(t) = 40-z_spare2(t);
-% end
-
 L_result1 = subs(L_expect(z),z,z_spare3);
 L_result2 = subs(L_expect(z),z,z_spare4);
+
+EE_result = subs(transmission(z),z,z_spare2_ori);
+EE_result1 = subs(transmission(z),z,z_spare3);
+EE_result2 = subs(transmission(z),z,z_spare4);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
@@ -112,7 +121,13 @@ title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
 
 
 subplot(1,3,3)
-plot(z, z_spare_difference, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x3, EE_result1, 'k:', 'LineWidth', 2);
+
+hold on;
+plot(x4, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
@@ -123,7 +138,7 @@ xlim([0 1000])
 % Create ylabel
 ylabel('Standard Error','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([-5 50])
+ylim([0 90])
 
 title('Standard Error vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
