@@ -91,9 +91,13 @@ xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambr
 xlim([0 800])
 
 % Create ylabel
-ylabel('cluster size','FontWeight','bold','FontSize',11,...
+ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
 ylim([15 45])
+
+title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
 
 subplot(1,3,2)
 
@@ -136,11 +140,11 @@ xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambr
 xlim([0 800])
 
 % Create ylabel
-ylabel('Standard Error','FontWeight','bold','FontSize',11,...
+ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 110])
+ylim([-30 80])
 
-title('Standard Error vs. Iteration#','FontWeight','bold','FontSize',12,...
+title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
 
