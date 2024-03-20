@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,cm_cm_distance)
-    step_size = 0.001;
+    step_size = 0.0001;
     delta = 1e-1;
     
     if target(index) == 0
@@ -56,7 +56,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);

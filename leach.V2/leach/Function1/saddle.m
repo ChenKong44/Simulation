@@ -37,7 +37,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 1000;
+    iteration= 500;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -64,7 +64,7 @@ clear;
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
         z_spare=[z_spare,z(1)];
-        z_spare2=[z_spare2,z(2)];
+        z_spare2=[z_spare2,round(z(2))];
         z_spare3=[z_spare3,round(z(3))];
         z_spare4=[z_spare4,round(z(4))];
 

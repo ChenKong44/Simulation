@@ -59,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
@@ -151,7 +151,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     grad2 = 0.3;                % check gradient function 
     
 
-    laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
+    laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) .* h_gradient;
     z(index) = z_new - step_size .* laplase;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);

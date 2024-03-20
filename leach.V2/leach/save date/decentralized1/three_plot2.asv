@@ -57,11 +57,11 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 transmission(z) = (z.*brmax.*0.03932)./L_expect(z);
 
 L_result = subs(L_expect(z),z,z_spare2_ori);
-L_result1 = subs(L_expect(z),z,z_spare22);
+L_result1 = subs(L_expect(z),z,z_spare3);
 L_result2 = subs(L_expect(z),z,z_spare4);
 
 EE_result = subs(transmission(z),z,z_spare2_ori);
-EE_result1 = subs(transmission(z),z,z_spare22);
+EE_result1 = subs(transmission(z),z,z_spare3);
 EE_result2 = subs(transmission(z),z,z_spare4);
 
 % syms a b
@@ -72,20 +72,19 @@ EE_result2 = subs(transmission(z),z,z_spare4);
 
  
 z=1:1:1000;
-x2=1:1:3000;
 
 subplot(1,3,1);
 plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, z_spare22, 'k:', 'LineWidth', 2);
+plot(x4, z_spare4, 'k:', 'LineWidth', 2);
 
 hold on;
 plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 
-legend('ADSGT','DSGT','SGD')
+legend('ADSGT','DSGT','SGD,high moisture')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -105,7 +104,7 @@ subplot(1,3,2)
 plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, L_result1, 'k:', 'LineWidth', 2);
+plot(x3, L_result1, 'k:', 'LineWidth', 2);
 
 hold on;
 plot(x4, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
@@ -129,7 +128,7 @@ subplot(1,3,3)
 plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, EE_result1, 'k:', 'LineWidth', 2);
+plot(x3, EE_result1, 'k:', 'LineWidth', 2);
 
 hold on;
 plot(x4, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
