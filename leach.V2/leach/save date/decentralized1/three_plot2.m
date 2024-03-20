@@ -85,7 +85,7 @@ plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 
-legend('ADSGT','DSGT','SGD')
+legend('ADSGT','SGD','DSGT')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -112,6 +112,8 @@ plot(x4, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 
+legend('ADSGT','SGD','DSGT')
+
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 800])
 
@@ -137,6 +139,8 @@ plot(x4, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
 % Create xlabel
+legend('ADSGT','SGD','DSGT')
+
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 800])
 
