@@ -94,7 +94,7 @@ xlim([0 800])
 % Create ylabel
 ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([15 45])
+ylim([15 65])
 
 title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -143,7 +143,7 @@ xlim([0 800])
 % Create ylabel
 ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([-30 80])
+ylim([-30 120])
 
 title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
