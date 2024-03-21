@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
-    step_size = 0.01;
+    step_size = 0.08;
     delta = 1e-1;
     
     if target(index) == 0
@@ -150,7 +150,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
-    z(index) = z_new - step_size .* L_gradient1-0.05.*h_result;
+    z(index) = z_new - step_size .* L_gradient1-0.5.*h_result;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 
