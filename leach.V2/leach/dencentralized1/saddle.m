@@ -1,4 +1,7 @@
-function [targetz] = saddle(moisture)
+% function [targetz] = saddle(moisture)
+
+clc;
+clear;
     z = [20 20 20 20];
     z_spare = [];
     z_spare2 = [];
@@ -13,7 +16,7 @@ function [targetz] = saddle(moisture)
     xmax=0.20;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
-    theta = [x(randi([1,n])) moisture x(randi([1,n])) x(randi([1,n]))];
+    theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
 
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
@@ -55,40 +58,40 @@ function [targetz] = saddle(moisture)
         L_spare2=[L_spare2,round(L_result(2))];
 
     end
-%         subplot(2,1,1);
-%         x=1:1:iteration;
-%         
-%         % Create plot
-%         plot(x,z_spare2,'b-');
-%         
-%         legend('ClusterHead# 1')
-%     
-%         % Create xlabel
-%         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-%         
-%         % Create ylabel
-%         ylabel('Cluster size','FontWeight','bold','FontSize',11,...
-%             'FontName','Cambria');
-%         
-%         % Create title
-%         title('Number of cluster members vs. Iteration#','FontWeight','bold','FontSize',12,...
-%             'FontName','Cambria');
-% 
-%         subplot(2,1,2);
-% 
-%         % Create plot
-%         plot(x,L_spare,'b-',x,H_spare,'r-');
-%         
-%         legend('Objective funcion','Constraint Violation')
-%     
-%         % Create xlabel
-%         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-%         
-%         % Create ylabel
-%         ylabel('Objective function & Constraint violation','FontWeight','bold','FontSize',11,...
-%             'FontName','Cambria');
-%         
-%         % Create title
-%         title('Objective function & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
-%             'FontName','Cambria');
-end
+        subplot(2,1,1);
+        x=1:1:iteration;
+        
+        % Create plot
+        plot(x,z_spare2,'b-');
+        
+        legend('ClusterHead# 1')
+    
+        % Create xlabel
+        xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+        
+        % Create ylabel
+        ylabel('Cluster size','FontWeight','bold','FontSize',11,...
+            'FontName','Cambria');
+        
+        % Create title
+        title('Number of cluster members vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+        subplot(2,1,2);
+
+        % Create plot
+        plot(x,L_spare,'b-',x,H_spare,'r-');
+        
+        legend('Objective funcion','Constraint Violation')
+    
+        % Create xlabel
+        xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+        
+        % Create ylabel
+        ylabel('Objective function & Constraint violation','FontWeight','bold','FontSize',11,...
+            'FontName','Cambria');
+        
+        % Create title
+        title('Objective function & Constraint violation vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+% end

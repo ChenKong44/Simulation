@@ -1,7 +1,7 @@
 % function saddle()
 clc;
 clear;
-    z = [20 20 20 20];
+    z = [1 1 1 1];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
@@ -36,7 +36,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 3000;
+    iteration= 1000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -64,8 +64,8 @@ clear;
 %         fprintf('L_result: %d\n',L_result(1));
         z_spare=[z_spare,z(1)];
         z_spare2=[z_spare2,z(2)];
-%         z_spare3=[z_spare3,round(z(3))];
-%         z_spare4=[z_spare4,round(z(4))];
+        z_spare3=[z_spare3,z(3)];
+        z_spare4=[z_spare4,z(4)];
 
         L_spare=[L_spare,round(L_result(2))];
         H_spare=[H_spare,H_result(2)];
