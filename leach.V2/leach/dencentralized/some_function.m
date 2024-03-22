@@ -23,7 +23,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
-    coverage = 3.5;
+    coverage = 4.4;
 
 
     syms x
