@@ -33,6 +33,7 @@ clear;
 %     aboveground_prob = y(randi([1,n]));
     aboveground_prob = 1-underground_prob;
 
+
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
@@ -94,7 +95,7 @@ clear;
         subplot(2,1,2);
 
         % Create plot
-        plot(x,L_spare,'b-',x,H_spare,'r-');
+        plot(x,z_spare3,'b-',x,H_spare,'r-');
         
         legend('Objective funcion','Constraint Violation')
     

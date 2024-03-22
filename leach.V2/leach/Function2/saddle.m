@@ -79,7 +79,7 @@ clear;
         % Create plot
         plot(x,z_spare2,'b-');
         
-        legend('ClusterHead# 1')
+        legend('ClusterHead# 1');
     
         % Create xlabel
         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -97,7 +97,7 @@ clear;
         % Create plot
         plot(x,z_spare3,'b-',x,H_spare,'r-');
         
-        legend('Objective funcion','Constraint Violation')
+        legend('Objective funcion','Constraint Violation');
     
         % Create xlabel
         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');

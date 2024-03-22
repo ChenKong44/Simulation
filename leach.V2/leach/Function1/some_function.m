@@ -1,5 +1,5 @@
 function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob)
-    step_size = 0.01;
+    step_size = 0.05;
     delta = 1e-1;
     
     if target(index) == 0
@@ -33,9 +33,9 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     intraclustermembers = sqrt(20./4./(density1));
     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
-    basedistance =  sqrt(x./4./(4.5))+sqrt(z(target(index))./4./(4.5)) ;
+    basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
-%     addpath 'soil equations'
+    addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
 
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
@@ -151,7 +151,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 %     grad2 = 0.3;                % check gradient function 
     
 
-    laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) .* h_gradient;
+    laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
     z(index) = z_new - step_size .* laplase;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
