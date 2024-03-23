@@ -58,11 +58,11 @@ transmission(z) = (z.*brmax.*0.03932)./L_expect(z);
 
 L_result = subs(L_expect(z),z,z_spare2_ori);
 L_result1 = subs(L_expect(z),z,z_spare22);
-L_result2 = subs(L_expect(z),z,z_spare4);
+L_result2 = subs(L_expect(z),z,z_spare3);
 
 EE_result = subs(transmission(z),z,z_spare2_ori);
 EE_result1 = subs(transmission(z),z,z_spare22);
-EE_result2 = subs(transmission(z),z,z_spare4);
+EE_result2 = subs(transmission(z),z,z_spare3);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
@@ -78,10 +78,10 @@ subplot(1,3,1);
 plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, z_spare22, 'k:', 'LineWidth', 2);
+plot(z, z_spare22, 'k:', 'LineWidth', 2);
 
 hold on;
-plot(x3, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 
@@ -105,10 +105,10 @@ subplot(1,3,2)
 plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, L_result1, 'k:', 'LineWidth', 2);
+plot(z, L_result1, 'k:', 'LineWidth', 2);
 
 hold on;
-plot(x4, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 
@@ -131,10 +131,10 @@ subplot(1,3,3)
 plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(x2, EE_result1, 'k:', 'LineWidth', 2);
+plot(z, EE_result1, 'k:', 'LineWidth', 2);
 
 hold on;
-plot(x4, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
