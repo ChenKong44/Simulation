@@ -89,12 +89,12 @@ legend('ADSGT','SGD','DSGT')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 800])
+xlim([0 1000])
 
 % Create ylabel
 ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([15 65])
+ylim([-20 50])
 
 title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -115,12 +115,12 @@ grid on;
 legend('ADSGT','SGD','DSGT')
 
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 800])
+xlim([0 1000])
 
 % Create ylabel
 ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 90])
+ylim([10 120])
 
 title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -142,12 +142,12 @@ grid on;
 legend('ADSGT','SGD','DSGT')
 
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 800])
+xlim([0 1000])
 
 % Create ylabel
 ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([-30 120])
+ylim([-10 80])
 
 title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
