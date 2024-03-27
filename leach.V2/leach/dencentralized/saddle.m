@@ -39,10 +39,10 @@ clear;
 %     iteration=2;
     for t = 1:1:iteration
         fprintf('iteration #: %d\n',t);
-        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result);
-        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function_globecom(1, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function_globecom(2, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function_globecom(3, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function_globecom(4, target, t, z, lamda, theta,L_result,H_result);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
