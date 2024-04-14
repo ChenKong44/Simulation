@@ -126,7 +126,7 @@ x= [1 2 3 4 5 6 7 8 9 10 11 12];
 % Create plot
 plot(x,energy_spare,'k--o',x,energy_spare2,'k-*');
 set(gca, 'XTick',x) 
-legend('SSGD without adaptive QoS meachanism','SSGD with adaptive QoS meachanism','Temperature')
+legend('SSGD without signal strength adaptive meachanism','SSGD with signal strength adaptive meachanism')
 
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -138,14 +138,14 @@ ylabel('Cumulative Energy Cost','FontWeight','bold','FontSize',11,...
 yticklabels({'0','50','100','150','200','250','300','350','400'})
 ylim([0 400])
 
-yyaxis right
-plot(x,energy_spare1,'k--x','LineWidth', 2);
-% bar(x,energy_difference)
-ylabel('Moisture level','FontWeight','bold','FontSize',11,...
-'FontName','Cambria');
-ax = gca;
-ax.YColor = 'k';
-ylim([0 80])
+% yyaxis right
+% plot(x,energy_spare1,'k--x','LineWidth', 2);
+% % bar(x,energy_difference)
+% ylabel('Moisture level','FontWeight','bold','FontSize',11,...
+% 'FontName','Cambria');
+% ax = gca;
+% ax.YColor = 'k';
+% ylim([0 80])
 
 grid on;
 
