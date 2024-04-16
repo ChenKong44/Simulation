@@ -75,57 +75,29 @@ z=1:1:1000;
 x2=1:1:3000;
 
 subplot(1,3,1);
-x=1:1:12;
-y=[humidity_spare;temperature_spare];
-bar(x,y)
+plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_spare22, 'k:', 'LineWidth', 2);
+
+hold on;
+plot(z, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
-legend('Humidity','Temperature')
 
+legend('ADSGT','SGD','DSGT')
+    
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xticklabels({'07:09','08:12','09:48','10:52','11:32','12:34','13:08','14:10','15:34','17:38','19:17','21:19','23:57'})
-% xlim([0 10])
+xlim([0 1000])
 
 % Create ylabel
-ylabel('Humidity and Temperature','Interpreter','latex');
-ylim([0 0.15])
+ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([-20 50])
 
-
-title('Energy Consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
+title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
-yyaxis right
-plot(x,energy_spare1,'k--x','LineWidth', 2);
-ylabel('Energy consumption','FontWeight','bold','FontSize',11,...
-'FontName','Cambria');
-ax = gca;
-ax.YColor = 'k';
-ylim([0 80])
-
-
-% plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
-% 
-% hold on;
-% plot(z, z_spare22, 'k:', 'LineWidth', 2);
-% 
-% hold on;
-% plot(z, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
-% 
-% grid on;
-% 
-% legend('ADSGT','SGD','DSGT')
-%     
-% % Create xlabel
-% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-% xlim([0 1000])
-% 
-% % Create ylabel
-% ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
-%     'FontName','Cambria');
-% ylim([-20 50])
-% 
-% title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
-%             'FontName','Cambria');
 
 
 subplot(1,3,2)
@@ -156,53 +128,29 @@ title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
 
 
 subplot(1,3,3)
-plot(x,energy_spare,'k--o',x,energy_spare2,'k-*');
-set(gca, 'XTick',x) 
-legend('SSGD without signal strength adaptive meachanism','SSGD with signal strength adaptive meachanism')
+plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
 
-% Create xlabel
-xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xticklabels({'07:09','08:12','09:48','10:52','11:32','12:34','13:08','14:10','15:34','17:38','19:17','21:19','23:57'})
+hold on;
+plot(z, EE_result1, 'k:', 'LineWidth', 2);
 
-% Create ylabel
-ylabel('Cumulative Energy Cost','FontWeight','bold','FontSize',11,...
-'FontName','Cambria');
-yticklabels({'0','50','100','150','200','250','300','350','400'})
-ylim([0 400])
-
-% yyaxis right
-% plot(x,energy_spare1,'k--x','LineWidth', 2);
-% % bar(x,energy_difference)
-% ylabel('Moisture level','FontWeight','bold','FontSize',11,...
-% 'FontName','Cambria');
-% ax = gca;
-% ax.YColor = 'k';
-% ylim([0 80])
+hold on;
+plot(z, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
-% plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
-% 
-% hold on;
-% plot(z, EE_result1, 'k:', 'LineWidth', 2);
-% 
-% hold on;
-% plot(z, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
-% 
-% grid on;
-% % legend('SSGD','SGD,low moisture','SGD,high moisture')
-% % Create xlabel
-% legend('ADSGT','SGD','DSGT')
-% 
-% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-% xlim([0 1000])
-% 
-% % Create ylabel
-% ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
-%     'FontName','Cambria');
-% ylim([-10 80])
-% 
-% title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
-%             'FontName','Cambria');
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
+% Create xlabel
+legend('ADSGT','SGD','DSGT')
+
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
+    'FontName','Cambria');
+ylim([-10 80])
+
+title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
 
 
 % 
