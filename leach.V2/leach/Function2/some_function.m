@@ -35,7 +35,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
-    addpath 'soil equations'
+%     addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
 
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
@@ -59,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);

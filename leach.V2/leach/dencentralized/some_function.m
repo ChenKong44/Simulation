@@ -1,4 +1,4 @@
-function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result)
+function [z, lamda, target, theta,L_result,H_result] = some_function(index, target, iteration, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob)
     step_size = 0.08;
     delta = 1e-1;
     
@@ -13,17 +13,20 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
 
-  
-
     if mod(iteration,10)==0
         theta(index) = x(randi([1,n]));
     end
+
+   
+  
+
+    
 %     fprintf('theta is: %d\n',theta(index));
 
-    max_clustersize = 50;
+    max_clustersize = 8;
     interference = 1;
-    density1=4.5;
-    coverage = 3.5;
+    density1=4.7;
+    coverage = 1.54;
 
 
     syms x
@@ -32,13 +35,13 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
-    addpath 'soil equations'
+%     addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
 
-    Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
-    Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
-    Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
-    Energy_receive = 50*0.000000001;
+    Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.00000001;
+    Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.00000001;
+    Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.00000001;
+    Energy_receive = 50*0.0000000001;
 %     energy_system = 50*0.0000001;
 
     brmax = bitrate;
@@ -56,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
@@ -87,7 +90,6 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
         syms a b
         h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
         h_constraintdiff = abs(diff(h_constraint(a,b),a));
-        h_result = subs(h_constraint,{a,b},{z(index),z(target(index))});
         h_gradient = subs(h_constraintdiff,{a,b},{z(index),z(target(index))});
         if h_gradient==0
            h_gradient = 0.0001;
@@ -101,7 +103,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
         laplase = L_gradient1 + (lamda(index,target(index)) + lamda(target(index),index)) * h_gradient;
-        z_new = z(index) - step_size * L_gradient1-0.5.*h_result;
+        z_new = z(index) - step_size * laplase;
         z_new = min(max(z_new,0),max_clustersize);
     else
         z_new = double(z(index));
@@ -150,7 +152,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 
     laplase = L_gradient1 + (lamda(index,target(index))+lamda(target(index),index)) * h_gradient;
-    z(index) = z_new - step_size .* L_gradient1-0.5.*h_gradient;
+    z(index) = z_new - step_size .* laplase;
 %     fprintf('laplase: %.5f\n',laplase);
     z(index) = min(max(z(index),1),max_clustersize);
 

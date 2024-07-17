@@ -1,7 +1,7 @@
-z1 = 28;
-z2 = 32;
-lamuda1 = 0.08;
-lamuda2 = 0.09;
+z1 = 3;
+z2 = 4;
+lamuda1 = 0.5;
+lamuda2 = 0.5;
 
 step_size = 0.06;
 delta = 1e-1;
@@ -21,7 +21,7 @@ packetLength = 32.*8;
 Energy_init = 0.5;
     
 syms x b
-h_constraint(x,b) = 3./2.*(sqrt(x./4./(density1))+sqrt(b./4./(density1)))-5;
+h_constraint(x,b) = (1./2.*(sqrt(x)+sqrt(b))-sqrt(x))-1.5;
 h_constraintdiff(x) = abs(diff(h_constraint(x,b),x));
 h_gradient = subs(h_constraintdiff,{b},{z2});
 

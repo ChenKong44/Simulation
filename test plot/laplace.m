@@ -1,15 +1,15 @@
-z1 = 28;
-z2 = 32;
-lamuda1 = 0.5;
-lamuda2 = 0.5;
+z1 = 3;
+z2 = 3;
+lamuda1 = 0.7;
+lamuda2 = 0.7;
 
 step_size = 0.06;
 delta = 1e-1;
 
-Energy_transfer_ch= 0.2238;
-Energy_transfer_cm = 0.0244;
-Energy_receive = 50*0.000000001;
-energy_system = 50*0.0000001;
+Energy_transfer_ch= 0.2238*1e1;
+Energy_transfer_cm = 0.144*1e1;
+Energy_receive = 5*0.000000001;
+energy_system = 5*0.0000001;
 
 max_clustersize = 50;
 interference = 1;
@@ -21,17 +21,16 @@ packetLength = 32.*8;
 Energy_init = 0.5;
 
 syms x
-br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
-
-L_expect(x) = Energy_init ./ ( ( (x-1) ) .*(Energy_receive+Energy_transfer_cm).* packetLength ./ br+...
-ctrPacketLength.*Energy_transfer_ch./ ( br) );
+term1(x) = -0.5 * log(2 * pi^2 * x^2);
+term2(x) = -((43 - 15)^2) / (2 * x^2);
+L_expect(x) = term1(x) + term2(x);
 L_expectdiff(x) = diff(L_expect(x));
 
     
 syms x b
-h_constraint(x,b) = 3./2.*(sqrt(x./4./(density1))+sqrt(b./4./(density1)))-5;
+h_constraint(x,b) = 1./2.*(sqrt(x./(density1))+sqrt(b./(density1)))-1.5;
 h_constraintdiff(x) = abs(diff(h_constraint(x,b),x));
-h_gradient(x) = subs(h_constraintdiff,{b},{z2});
+h_gradient(x) = subs(h_constraintdiff,{z1},{z2});
 
 laplase(x) = L_expectdiff(x) + (lamuda1+lamuda2) * h_gradient(x);
 

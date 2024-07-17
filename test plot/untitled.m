@@ -17,8 +17,8 @@ density1=4.5;
 
 
 
-ctrPacketLength = 15.*8; %12-256 bytes
-packetLength = 32.*8;
+ctrPacketLength = 18.*8; %12-256 bytes
+packetLength = 25.*8;
 
 Energy_init = 0.5;
     
