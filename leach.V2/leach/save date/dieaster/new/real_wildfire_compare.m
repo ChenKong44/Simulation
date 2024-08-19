@@ -11,6 +11,7 @@ m = [0.185 0.165 0.155 0.185 0.1565 0.15325 0.1425 0.112 0.18325 0.149 0.1035 0.
 
 energy_spare=[];
 energy_spare2=[];
+energy_spare3=[];
 energy_difference=[];
 humidity_spare=[];
 temperature_spare=[];
@@ -71,15 +72,19 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 
     L_result1 = double(subs(L_expect(z),24));
     L_result2 = double(subs(L_expect(z),z,target_spare(t)));
+    L_result3 = double(subs(L_expect(z),28));
     energy_spare1=[energy_spare,L_result1 ];
     energy_spare=[energy_spare,L_result1 ];
     energy_spare2=[energy_spare2,L_result2];
+    energy_spare3=[energy_spare3,L_result3];
 end
     energy_spare = [energy_spare 0];
     energy_spare2 = [energy_spare2 0];
+    energy_spare3 = [energy_spare3 0];
 for t=1:1:12
     energy_spare(t+1)=energy_spare(t+1)+energy_spare(t);
     energy_spare2(t+1)=energy_spare2(t+1)+energy_spare2(t);
+    energy_spare3(t+1)=energy_spare3(t+1)+energy_spare3(t);
 end
 
 m = [m 0.2];
@@ -95,6 +100,7 @@ end
 
 energy_spare(13)=[];
 energy_spare2(13)=[];
+energy_spare3(13)=[];
 % humidity_spare(13)=[];
 
 % energy_difference(13)=[];
@@ -124,9 +130,9 @@ subplot(1,2,2);
 x= [1 2 3 4 5 6 7 8 9 10 11 12];
 
 % Create plot
-plot(x,energy_spare,'-o',x,energy_spare2,'-*');
+plot(x,energy_spare2,'-*',x,energy_spare,'-o',x,energy_spare3,'-+');
 set(gca, 'XTick',x) 
-legend('SSGD without signal strength adaptive meachanism','SSGD with signal strength adaptive meachanism')
+legend('ADSGT','SGD','DSGT','FontWeight','bold','FontSize',9,'FontName','Cambria')
 
 % Create xlabel
 xlabel('Wildfire Rescue Time','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -161,7 +167,7 @@ y=[humidity_spare;temperature_spare];
 bar(x,y)
 
 grid on;
-legend('Humidity','Temperature')
+legend('Humidity','Temperature','FontWeight','bold','FontSize',9,'FontName','Cambria')
 
 % Create xlabel
 xlabel('Wildfire Rescue Time','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -169,7 +175,7 @@ xticklabels({'07:09','08:12','09:48','10:52','11:32','12:34','13:08','14:10','15
 % xlim([0 10])
 
 % Create ylabel
-ylabel('Humidity and Temperature','Interpreter','latex');
+ylabel('Humidity and Temperature','FontWeight','bold','FontSize',11,'FontName','Cambria');
 ylim([0 0.15])
 
 

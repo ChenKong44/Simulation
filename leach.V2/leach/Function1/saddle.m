@@ -31,8 +31,8 @@ clear;
     y=ymin+rand(1,n)*(ymax-ymin);
 
 %     aboveground_prob = y(randi([1,n]));
-
     aboveground_prob = 1-underground_prob;
+
 
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
@@ -79,7 +79,7 @@ clear;
         % Create plot
         plot(x,z_spare2,'b-');
         
-        legend('ClusterHead# 1')
+        legend('ClusterHead# 1');
     
         % Create xlabel
         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
@@ -95,9 +95,9 @@ clear;
         subplot(2,1,2);
 
         % Create plot
-        plot(x,L_spare,'b-',x,H_spare,'r-');
+        plot(x,z_spare3,'b-',x,H_spare,'r-');
         
-        legend('Objective funcion','Constraint Violation')
+        legend('Objective funcion','Constraint Violation');
     
         % Create xlabel
         xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');

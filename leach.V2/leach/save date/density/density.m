@@ -38,9 +38,9 @@ legend('Moisture range: 0.05-0.25','Moisture range: 0.15-0.35','Moisture range: 
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 2000])
+xlim([0 1000])
 
 % Create ylabel
 ylabel('Cluster size','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([0 80])
+ylim([10 50])

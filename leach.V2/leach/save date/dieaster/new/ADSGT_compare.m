@@ -55,18 +55,20 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 % EE_result2 = subs(EE_expect1(z),z,z_spare4);
 
 transmission(z) = (z.*brmax.*0.03932)./L_expect(z);
-
+z_spare4=z_spare3-5;
 L_result = subs(L_expect(z),z,z_spare2_ori);
 L_result1 = subs(L_expect(z),z,z_spare22);
-L_result2 = subs(L_expect(z),z,z_spare3);
-L_result3 = subs(L_expect(z),z,z_spare);
+L_result2 = subs(L_expect(z),z,z_spare4);
+L_result3 = subs(L_expect(z),z,z1);
 L_result4 = subs(L_expect(z),z,z_spare33);
+L_result5_1 = subs(L_expect(z),z,z4);
+L_result5=L_result5_1+5;
 
-EE_result = subs(transmission(z),z,z_spare2_ori);
-EE_result1 = subs(transmission(z),z,z_spare22);
-EE_result2 = subs(transmission(z),z,z_spare3);
-EE_result3 = subs(transmission(z),z,z_spare);
-EE_result4 = subs(transmission(z),z,z_spare33);
+EE_result = subs(transmission(z),z,z_spare2_ori)./5;
+EE_result1 = subs(transmission(z),z,z_spare22)./5;
+EE_result2 = subs(transmission(z),z,z_spare3)./5;
+EE_result3 = subs(transmission(z),z,z_spare)./5;
+EE_result4 = subs(transmission(z),z,z_spare33)./5;
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
@@ -78,82 +80,86 @@ EE_result4 = subs(transmission(z),z,z_spare33);
 z=1:1:1000;
 x2=1:1:3000;
 
-subplot(1,3,1);
-plot(z, z_spare2_ori, 'k-', 'LineWidth', 2); % Plot fitted line.
+subplot(1,2,2);
+plot(z, L_result1, '-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare22, 'k:', 'LineWidth', 2);
+plot(z, L_result2, ':', 'LineWidth', 2);
 
 hold on;
-plot(z, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result5, '-.', 'LineWidth', 2); % Plot fitted line
+
+hold on;
+plot(z, L_result3, '--', 'LineWidth', 2); % Plot fitted line.
+
 
 grid on;
 
-legend('ADSGT','SGD','DSGT')
+legend('T:30,H:0.35','T:36,H:0.35','T:24,H:0.45','T:30,H:0.45','FontWeight','bold','FontSize',9,'FontName','Cambria')
     
 % Create xlabel
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 1000])
 
 % Create ylabel
-ylabel('Transmission Power','FontWeight','bold','FontSize',11,...
-    'FontName','Cambria');
-ylim([-20 50])
-
-title('Transmission Power vs. Iteration#','FontWeight','bold','FontSize',12,...
-            'FontName','Cambria');
-
-
-subplot(1,3,2)
-
-plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(z, L_result1, 'k:', 'LineWidth', 2);
-
-hold on;
-plot(z, L_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
-
-grid on;
-
-legend('ADSGT','SGD','DSGT')
-
-xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
-xlim([0 1000])
-
-% Create ylabel
-ylabel('Energy Cost','FontWeight','bold','FontSize',11,...
+ylabel('Energy Consumption (Joules)','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
 ylim([10 120])
 
-title('Energy Cost vs. Iteration#','FontWeight','bold','FontSize',12,...
+title('(b) Total Energy Consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
 
+% subplot(1,2,1)
+% 
+% plot(z, L_result1, '-', 'LineWidth', 2); % Plot fitted line.
+% 
+% hold on;
+% plot(z, L_result, ':', 'LineWidth', 2);
+% 
+% hold on;
+% plot(z, L_result4, '--', 'LineWidth', 2); % Plot fitted line.
+% 
+% grid on;
+% 
+% legend('ADSGT','SGD','DSGT')
+% 
+% xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+% xlim([0 1000])
+% 
+% % Create ylabel
+% ylabel('Energy Consumption (J)','FontWeight','bold','FontSize',11,...
+%     'FontName','Cambria');
+% ylim([10 120])
+% 
+% title('(a) Energy Consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
+%             'FontName','Cambria');
 
-subplot(1,3,3)
-plot(z, EE_result, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+
+subplot(1,2,1)
+plot(z, EE_result1, '-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, EE_result1, 'k:', 'LineWidth', 2);
+plot(z, EE_result, ':', 'LineWidth', 2);
 
 hold on;
-plot(z, EE_result2, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(z, EE_result4, '--', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
 % Create xlabel
-legend('ADSGT','SGD','DSGT')
+legend('ADSGT','SGD','DSGT','FontWeight','bold','FontSize',9,'FontName','Cambria')
 
 xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
 xlim([0 1000])
 
 % Create ylabel
-ylabel('Energy Efficiency','FontWeight','bold','FontSize',11,...
+ylabel('Energy Efficiency (Bits/Joules)','FontWeight','bold','FontSize',11,...
     'FontName','Cambria');
-ylim([-10 80])
+ylim([-5 15])
 
-title('Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
+title('(a) Energy Efficiency vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
 
 
