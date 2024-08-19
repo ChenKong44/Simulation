@@ -23,14 +23,14 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 %     fprintf('theta is: %d\n',theta(index));
 
-    max_clustersize = 100;
+    max_clustersize = 50;
     interference = 1;
-    density1=2.5;
-    coverage = 4.5;
+    density1=4.5;
+    coverage = 4.4;
 
 
     syms x
-    intraclustermembers = sqrt(10./4./(density1));
+    intraclustermembers = sqrt(20./4./(density1));
     underground_cluster = sqrt(x./4./(density1)).*0.05;
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
@@ -59,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
