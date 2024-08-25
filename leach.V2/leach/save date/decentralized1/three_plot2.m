@@ -16,7 +16,7 @@ density1=4.5;
 coverage = 4;
 
 syms z
-
+    
 intraclustermembers = sqrt(20./4./(density1));
 underground_cluster = sqrt(z./4./(density1)).*0.05;
 aboveground_cluster = sqrt(z./4./(density1)).*0.95;
