@@ -8,14 +8,14 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
     
 %     theta_old = theta(index);
-    xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
-    n=20;
-    x=xmin+rand(1,n)*(xmax-xmin);
-
-    if mod(iteration,10)==0
-        theta(index) = x(randi([1,n]));
-    end
+%     xmin=0.15;  %minimum moisture lv
+%     xmax=0.35;   %max moisture lv
+%     n=20;
+%     x=xmin+rand(1,n)*(xmax-xmin);
+% 
+%     if mod(iteration,10)==0
+%         theta(index) = x(randi([1,n]));
+%     end
 
    
   
@@ -23,10 +23,10 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     
 %     fprintf('theta is: %d\n',theta(index));
 
-    max_clustersize = 8;
+    max_clustersize = 50;
     interference = 1;
-    density1=4.7;
-    coverage = 1.54;
+    density1=4.4;
+    coverage = 4.5;
 
 
     syms x
@@ -35,7 +35,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     aboveground_cluster = sqrt(x./4./(density1)).*0.95;
     basedistance =  sqrt(x./4./(density1))+sqrt(z(target(index))./4./(density1)) ;
 
-%     addpath 'soil equations'
+    addpath 'soil equations'
     [bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta(index),868);
 
     Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.00000001;
@@ -59,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.0003 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);

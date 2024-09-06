@@ -46,10 +46,13 @@ Energy_init = 50;
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
 L_result_opm = subs(L_expect(z),z,40);
-L_result = subs(L_expect(z),z,z_spare22);
-L_result1 = subs(L_expect(z),z,z_spare2);
-L_result2 = subs(L_expect(z),z,z_spare3);
-L_result3 = subs(L_expect(z),z,z_average);
+L_result1 = subs(L_expect(z),z,z_spare22);
+L_result2 = subs(L_expect(z),z,z_spare2_type2);
+L_result3 = subs(L_expect(z),z,z_spare3);
+L_result4= subs(L_expect(z),z,z_spare2_type3);
+L_result5 = subs(L_expect(z),z,z_average);
+L_result6= subs(L_expect(z),z,z_spare2_type1);
+
 
 syms a b
 h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
@@ -72,47 +75,50 @@ h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
 % end
 
 L_gap1 = zeros(1,1000);
-L_gap2 = zeros(1,1000);
+L_gap2 = zeros(1,2000);
 L_gap3 = zeros(1,1000);
-L_gap4 = zeros(1,1000);
+L_gap4 = zeros(1,3000);
+L_gap5 = zeros(1,1000);
+L_gap6 = zeros(1,2000);
 for h=1:1:1000
-    L_gap1(h)=(L_result(h)-L_result_opm)./L_result_opm;
-    L_gap2(h)=(L_result1(h)-L_result_opm)./L_result_opm;
-    L_gap3(h)=(L_result2(h)-L_result_opm)./L_result_opm;
-    L_gap4(h)=(L_result3(h)-L_result_opm)./L_result_opm;
+    L_gap1(h)=(L_result1(h)-L_result_opm)./L_result_opm;
+    L_gap3(h)=(L_result3(h)-L_result_opm)./L_result_opm;
+    L_gap5(h)=(L_result5(h)-L_result_opm)./L_result_opm;
 end
 
+for h=1:1:2000
+    L_gap2(h)=(L_result2(h)-L_result_opm)./L_result_opm;
+    L_gap6(h)=(L_result6(h)-L_result_opm)./L_result_opm;
+end
 
+for h=1:1:3000
+    L_gap4(h)=(L_result4(h)-L_result_opm)./L_result_opm;
+end
  
 z=1:1:1000;
 x=1:1:3000;
 y=1:1:2000;
 
-figure;
-% subplot(1,3,1)
+% figure;
+subplot(1,3,1)
 
 plot(z, z_spare22, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare2, 'k--', 'LineWidth', 2); % Plot fitted line.
-% 
-% hold on;
-% plot(z, z_spare2_ori, 'r---', 'LineWidth', 2); % Plot fitted line.
+plot(y, z_spare2_type2,'r-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, z_spare3, 'k:', 'LineWidth', 2); % Plot fitted line.
+plot(z, z_spare3, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(x, z_spare2_type3, 'r--', 'LineWidth', 2); % Plot fitted line.
+
 
 hold on;
 plot(z, z_average, 'k-.', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(y, z_spare2_type1, 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(y, z_spare2_type2, 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(x, z_spare2_type3, 'LineWidth', 2); % Plot fitted line.
+plot(y, z_spare2_type1, 'r-.', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD')
@@ -124,7 +130,7 @@ xlim([0 1000])
 ylabel('Cluster size: $z$','Interpreter','latex');
 ylim([10 50])
 
-legend('ASSP','SSP','DSIGN-SGD','DSGT')
+legend('ASSP-sandy loam','ASSP-loam','DSIGN-SGD-sandy loam','DSIGN-SGD-loam','DSGT-sandy loam','DSGT-loam')
 
 title('(a) Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -132,16 +138,22 @@ title('(a) Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
 
 subplot(1,3,2)
 
-plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result1, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result1, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(y, L_result2, 'r-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result2, 'k:', 'LineWidth', 2); % Plot fitted line.
+plot(z, L_result3, 'k--', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_result3, 'k-.', 'LineWidth', 2); % Plot fitted line.
+plot(x, L_result4, 'r--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_result5, 'k-.', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(y, L_result6, 'r-.', 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD','SGD,low moisture','SGD,high moisture')
@@ -153,7 +165,7 @@ xlim([0 1000])
 ylabel('Energy consumption: $E_{ch}(z,m_{v})$','Interpreter','latex');
 ylim([20 70])
 
-legend('ASSP','SSP','DSIGN-SGD','DSGT')
+legend('ASSP-sandy loam','ASSP-loam','DSIGN-SGD-sandy loam','DSIGN-SGD-loam','DSGT-sandy loam','DSGT-loam')
 
 title('(b) Energy consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
@@ -164,13 +176,19 @@ subplot(1,3,3)
 plot(z, L_gap1, 'k-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_gap2, 'k--', 'LineWidth', 2); % Plot fitted line.
+plot(y, L_gap2, 'r-', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
-plot(z, L_gap3, 'k:', 'LineWidth', 2);
+plot(z, L_gap3, 'k--', 'LineWidth', 2);
 
 hold on;
-plot(z, L_gap4, 'k-.', 'LineWidth', 2);
+plot(x, L_gap4, 'r--', 'LineWidth', 2);
+
+hold on;
+plot(z, L_gap5, 'k-.', 'LineWidth', 2);
+
+hold on;
+plot(y, L_gap6, 'r-.', 'LineWidth', 2);
 % hold on;
 % plot(z, z_spare_difference2, 'k:', 'LineWidth', 2); % Plot fitted line.
 
@@ -184,7 +202,7 @@ xlim([0 1000])
 ylabel('Relative energy consumption gap: $\frac{||(E_{c}(z,m_{v})) - (E_{c}(z^*,m_{v}))||}{||E_{c}(z^*,m_{v})||}$','Interpreter','latex');
 ylim([-0.5 1.5])
 
-legend('ASSP','SSP','DSIGN-SGD','DSGT')
+legend('ASSP-sandy loam','ASSP-loam','DSIGN-SGD-sandy loam','DSIGN-SGD-loam','DSGT-sandy loam','DSGT-loam')
 
 title('(c) Relative energy consumption gap vs. Iteration#','FontWeight','bold','FontSize',12,...
             'FontName','Cambria');
