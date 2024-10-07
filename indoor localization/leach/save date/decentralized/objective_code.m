@@ -1,0 +1,212 @@
+
+
+%     theta_old = theta(index);
+xmin=0.05;  %minimum moisture lv
+xmax=0.25;   %max moisture lv
+n=20;
+x=xmin+rand(1,n)*(xmax-xmin);
+
+% theta = x(randi([1,n]));
+theta = 0.1179;
+
+%     fprintf('theta is: %d\n',theta(index));
+
+max_clustersize = 50;
+interference = 1;
+density1=4.5;
+coverage = 4;
+
+syms z
+
+intraclustermembers = sqrt(20./4./(density1));
+underground_cluster = sqrt(z./4./(density1)).*0.05;
+aboveground_cluster = sqrt(z./4./(density1)).*0.95;
+basedistance =  sqrt(40./4./(density1))+sqrt(39./4./(density1)) ;
+
+addpath 'soil equations'
+[bitrate,Energy_transit_b,Energy_transit_cm,Energy_transit_cm_cm] = transmissionpower(basedistance,underground_cluster, aboveground_cluster,intraclustermembers,theta,868);
+
+Energy_transfer_ch= (10.^(Energy_transit_b./10).*1e-3)*0.0000001;
+Energy_transfer_cm = (10.^(Energy_transit_cm./10).*1e-3)*0.0000001;
+Energy_transfer_intracms = (10.^(Energy_transit_cm_cm./10).*1e-3)*0.0000001;
+Energy_receive = 50*0.000000001;
+
+brmax = bitrate;
+ctrPacketLength = 32.*8; %12-256 bytes
+packetLength = 32.*8;
+
+Energy_init = 50;
+    
+
+
+% PL(x) = (((0.5.*1e3./x)./(1.024)-8-4.25)./(4 + 4./5).*(7-2).*4+20-16-28+4.*7);
+% PL_diff(x) = diff(PL(x));
+% br = (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+
+L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
+L_result_opm = subs(L_expect(z),z,40);
+L_result = subs(L_expect(z),z,z_spare22);
+L_result1 = subs(L_expect(z),z,z_spare2);
+L_result2 = subs(L_expect(z),z,z_spare3);
+L_result3 = subs(L_expect(z),z,z_average);
+
+syms a b
+h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-4.5;
+% h_result = subs(h_constraint,{a,b},{z_spare22,z_spare2_50});
+% h_result1 = subs(h_constraint,{a,b},{z_spare2,z_spare2_50});
+% h_result2 = subs(h_constraint,{a,b},{z_spare3,z_spare2_50});
+% h_result3 = subs(h_constraint,{a,b},{z_average,z_spare2_50});
+% z_spare_difference = zeros(1, 10);  % Preallocate z_spare_difference array
+% z_spare_difference1 = zeros(1, 10);
+% z_spare_difference2 = zeros(1, 10);
+% z_spare_difference3 = zeros(1, 10);
+% for h = 1:1:10   % Loop over h from 1 to 100 with a step size of 1
+%     for t = 1:100:1000   % Loop over t from 1 to 1000 with a step size of 10
+%         index = (t-1)/100 + 1;   % Calculate the corresponding index in z_spare_difference
+%         z_spare_difference(index) = 40 - z_spare22(t);
+%         z_spare_difference1(index) = 40 - z_spare2(t);
+%         z_spare_difference2(index) = 40 - z_spare3(t);
+%         z_spare_difference3(index) = 40 - z_average(t);
+%     end
+% end
+
+L_gap1 = zeros(1,1000);
+L_gap2 = zeros(1,1000);
+L_gap3 = zeros(1,1000);
+L_gap4 = zeros(1,1000);
+for h=1:1:1000
+    L_gap1(h)=(L_result(h)-L_result_opm)./L_result_opm;
+    L_gap2(h)=(L_result1(h)-L_result_opm)./L_result_opm;
+    L_gap3(h)=(L_result2(h)-L_result_opm)./L_result_opm;
+    L_gap4(h)=(L_result3(h)-L_result_opm)./L_result_opm;
+end
+
+
+ 
+z=1:1:1000;
+x=1:1:3000;
+y=1:1:2280;
+
+figure;
+subplot(1,3,1)
+
+plot(z, z_spare22, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_spare2, 'k--', 'LineWidth', 2); % Plot fitted line.
+% 
+% hold on;
+% plot(z, z_spare2_ori, 'r---', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_spare3, 'k:', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, z_average, 'k-.', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Cluster size: $z$','Interpreter','latex');
+ylim([10 50])
+
+legend('ASSP','SSP','DSIGN-SGD','DSGT')
+
+title('(a) Cluster Size vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+subplot(1,3,2)
+
+plot(z, L_result, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_result1, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_result2, 'k:', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_result3, 'k-.', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Energy consumption: $E_{ch}(z,m_{v})$','Interpreter','latex');
+ylim([20 70])
+
+legend('ASSP','SSP','DSIGN-SGD','DSGT')
+
+title('(b) Energy consumption vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+
+
+subplot(1,3,3)
+plot(z, L_gap1, 'k-', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_gap2, 'k--', 'LineWidth', 2); % Plot fitted line.
+
+hold on;
+plot(z, L_gap3, 'k:', 'LineWidth', 2);
+
+hold on;
+plot(z, L_gap4, 'k-.', 'LineWidth', 2);
+% hold on;
+% plot(z, z_spare_difference2, 'k:', 'LineWidth', 2); % Plot fitted line.
+
+grid on;
+% legend('SSGD','SGD,low moisture','SGD,high moisture')
+% Create xlabel
+xlabel('Number of Iteration','FontWeight','bold','FontSize',11,'FontName','Cambria');
+xlim([0 1000])
+
+% Create ylabel
+ylabel('Relative energy consumption gap: $\frac{||(E_{c}(z,m_{v})) - (E_{c}(z^*,m_{v}))||}{||E_{c}(z^*,m_{v})||}$','Interpreter','latex');
+ylim([-0.5 1.5])
+
+legend('ASSP','SSP','DSIGN-SGD','DSGT')
+
+title('(c) Relative energy consumption gap vs. Iteration#','FontWeight','bold','FontSize',12,...
+            'FontName','Cambria');
+
+% figure;
+% x=1:1:10;
+% y=[z_spare_difference;z_spare_difference1;z_spare_difference2];
+% bar(x,y)
+% 
+% grid on;
+% legend('DSIGN-SGD','ASSP','SSP')
+% 
+% % Create xlabel
+% xlabel('Days','FontWeight','bold','FontSize',11,'FontName','Cambria');
+% xlim([0 10])
+% 
+% % Create ylabel
+% ylabel('Relative energy consumption gap: $\frac{||(E_{c}(z,m_{v})) - (E_{c}(z^*,m_{v}))||}{||E_{c}(z^*,m_{v})||}$','Interpreter','latex');
+% ylim([-1 25])
+% 
+% 
+% title('(c) Relative energy consumption gap vs. Iteration#','FontWeight','bold','FontSize',12,...
+%             'FontName','Cambria');
+
+
+% hold on;
+% plot(x_m3, z_spare3_m3, 'g-', 'LineWidth', 2); % Plot fitted line.
+% % 
+% hold on; % Set hold on so the next plot does not blow away the one we just drew.
+% plot(x, z_spare2_25, 'b-', 'LineWidth', 2); % Plot fitted line.
+
+
+    
+
