@@ -7,15 +7,15 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
     
     
-    theta_old = theta(index);
-    xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
-    n=20;
-    x=xmin+rand(1,n)*(xmax-xmin);
-
-    if mod(iteration,10)==0
-        theta(index) = x(randi([1,n]));
-    end
+%     theta_old = theta(index);
+%     xmin=0.05;  %minimum moisture lv
+%     xmax=0.25;   %max moisture lv
+%     n=20;
+%     x=xmin+rand(1,n)*(xmax-xmin);
+% 
+%     if mod(iteration,10)==0
+%         theta(index) = x(randi([1,n]));
+%     end
 
    
   
@@ -26,7 +26,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     max_clustersize = 50;
     interference = 1;
     density1=4.5;
-    coverage = 3.5;
+    coverage = 4.4;
 
 
     syms x
@@ -59,7 +59,7 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
 
 
     
-    if abs(theta(index) - theta(target(index))) < 0.003 %rssi determination
+    if abs(theta(index) - theta(target(index))) < 0.03 %rssi determination
         fprintf('change node \n')
 
         target = cal_distance(target, index);
@@ -75,8 +75,8 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
         
         br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
 %         L_expect(x) = (0.4.*x-6).^2+8;
-        L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( br));
+        L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
         L_expectdiff = diff(L_expect(x));
         L_gradient1 = subs(L_expectdiff,x,z(index));
         L_gradient1 = double(L_gradient1);
@@ -110,11 +110,11 @@ function [z, lamda, target, theta,L_result,H_result] = some_function(index, targ
     end
     z_new = 1/iteration * z(index) + (iteration-1)/iteration*z_new;
     
-    br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
+%     br = (x ./ (1 + interference .* (x - 1))) .* (125.*1e3 ./ (2.^7)) .* (4 ./ (4 + 4./5));
     
     syms x
-    L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
-        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( br));
+    L_expect(x) = (  (x-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-x ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
+        ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
     L_result(index) = subs(L_expect,x,z(index));
     L_expectdiff(x) = diff(L_expect(x));
     L_gradient1 = subs(L_expectdiff,x,z_new);

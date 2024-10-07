@@ -86,10 +86,10 @@ end
  
 z=1:1:1000;
 x=1:1:3000;
-y=1:1:2000;
+y=1:1:2280;
 
 figure;
-% subplot(1,3,1)
+subplot(1,3,1)
 
 plot(z, z_spare22, 'k-', 'LineWidth', 2); % Plot fitted line.
 
@@ -104,15 +104,6 @@ plot(z, z_spare3, 'k:', 'LineWidth', 2); % Plot fitted line.
 
 hold on;
 plot(z, z_average, 'k-.', 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(y, z_spare2_type1, 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(y, z_spare2_type2, 'LineWidth', 2); % Plot fitted line.
-
-hold on;
-plot(x, z_spare2_type3, 'LineWidth', 2); % Plot fitted line.
 
 grid on;
 % legend('SSGD')

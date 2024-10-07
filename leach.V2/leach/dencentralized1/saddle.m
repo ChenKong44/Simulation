@@ -13,7 +13,7 @@ clear;
     H_spare = [];
 
     xmin=0.05;  %minimum moisture lv
-    xmax=0.25;   %max moisture lv
+    xmax=0.20;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
     theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
@@ -21,7 +21,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 2000;
+    iteration= 700;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);

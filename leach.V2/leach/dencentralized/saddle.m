@@ -1,7 +1,7 @@
 % function saddle()
 clc;
 clear;
-    z = [20 20 20 20];
+    z = [0.5 0.5 0.5 0.5];
     z_spare = [];
     z_spare2 = [];
     z_spare3 = [];
@@ -11,8 +11,8 @@ clear;
     L_spare2 = [];
     H_spare = [];
 
-    xmin=0.15;  %minimum moisture lv
-    xmax=0.35;   %max moisture lv
+    xmin=0.05;  %minimum moisture lv
+    xmax=0.25;   %max moisture lv
     n=20;
     x=xmin+rand(1,n)*(xmax-xmin);
     theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
@@ -23,8 +23,8 @@ clear;
     t=tmin+rand(1,n)*(tmax-tmin);
 
     underground_prob = t(randi([1,n]));
-% 
-% 
+
+
     ymin=0.945;  %minimum moisture lv
     ymax=0.955;   %max moisture lv
     n=20;
@@ -37,7 +37,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 2000;
+    iteration= 3000;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
