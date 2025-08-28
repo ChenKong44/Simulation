@@ -10,28 +10,41 @@ clear;
     L_spare = [];
     L_spare2 = [];
     H_spare = [];
+    % 
+    % xmin=0.25;  %minimum moisture lv
+    % xmax=0.45;   %max moisture lv
+    % n=20;
+    % x=xmin+rand(1,n)*(xmax-xmin);
+    % theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
 
-    xmin=0.25;  %minimum moisture lv
-    xmax=0.45;   %max moisture lv
-    n=20;
-    x=xmin+rand(1,n)*(xmax-xmin);
-    theta = [x(randi([1,n])) x(randi([1,n])) x(randi([1,n])) x(randi([1,n]))];
+    xmin_CH = [0.05, 0.25, 0.40, 0.15];   % 每个CH的最小湿度
+    xmax_CH = [0.15, 0.35, 0.55, 0.30];   % 每个CH的最大湿度
 
-    tmin=0.045;  %minimum moisture lv
-    tmax=0.055;   %max moisture lv
-    n=20;
-    t=tmin+rand(1,n)*(tmax-tmin);
+    n = 20;   % 每个CH随机采样数量
+    theta = zeros(1,4);
 
-    underground_prob = t(randi([1,n]));
+    for i = 1:4
+        % 在对应的区间里生成 n 个随机点
+        x = xmin_CH(i) + rand(1,n) * (xmax_CH(i) - xmin_CH(i));
+        % 从这些点中随机选一个赋值给theta
+        theta(i) = x(randi([1,n]));
+    end
+
+    % tmin=0.045;  %minimum moisture lv
+    % tmax=0.055;   %max moisture lv
+    % n=20;
+    % t=tmin+rand(1,n)*(tmax-tmin);
+    % 
+    % underground_prob = t(randi([1,n]));
 
 
-    ymin=0.945;  %minimum moisture lv
-    ymax=0.955;   %max moisture lv
-    n=20;
-    y=ymin+rand(1,n)*(ymax-ymin);
+    % ymin=0.945;  %minimum moisture lv
+    % ymax=0.955;   %max moisture lv
+    % n=20;
+    % y=ymin+rand(1,n)*(ymax-ymin);
 
 %     aboveground_prob = y(randi([1,n]));
-    aboveground_prob = 1-underground_prob;
+    % aboveground_prob = 1-underground_prob;
 
 
     lamda = zeros(4,4);
@@ -56,10 +69,10 @@ clear;
 %     iteration=2;
     for t = 1:1:iteration
         fprintf('iteration #: %d\n',t);
-        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
-        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result,underground_prob,aboveground_prob);
+        [z, lamda, target, theta,L_result,H_result] = some_function(1, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function(2, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function(3, target, t, z, lamda, theta,L_result,H_result);
+        [z, lamda, target, theta,L_result,H_result] = some_function(4, target, t, z, lamda, theta,L_result,H_result);
 %         fprintf('target: %d %d %d %d\n',target(1), target(2), target(3), target(4));
         fprintf('z: %d %d %d %d\n',z(1), round(z(2)), round(z(3)), round(z(4)));
 %         fprintf('L_result: %d\n',L_result(1));
