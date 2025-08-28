@@ -56,13 +56,13 @@ L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ br
 
 transmission(z) = (z.*brmax.*0.03932)./L_expect(z);
 
-L_result = subs(L_expect(z),z,z_spare2_ori);
-L_result1 = subs(L_expect(z),z,z_spare22);
-L_result2 = subs(L_expect(z),z,z_spare3);
+L_result = subs(L_expect(z),z,z_spare2);
+L_result1 = subs(L_expect(z),z,z_spare3);
+L_result2 = subs(L_expect(z),z,z_spare4);
 
-EE_result = subs(transmission(z),z,z_spare2_ori);
-EE_result1 = subs(transmission(z),z,z_spare22);
-EE_result2 = subs(transmission(z),z,z_spare3);
+EE_result = subs(transmission(z),z,z_spare2);
+EE_result1 = subs(transmission(z),z,z_spare3);
+EE_result2 = subs(transmission(z),z,z_spare4);
 
 % syms a b
 % h_constraint(a,b) = 3./2.*(sqrt(a./4./(density1))+sqrt(b./4./(density1)))-coverage;
