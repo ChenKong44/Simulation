@@ -50,7 +50,7 @@ clear;
     lamda = zeros(4,4);
     L_result = [0 0 0 0];
     H_result = [0 0 0 0];
-    iteration= 1000;
+    iteration= 500;
 
 %     z1 = [0 0 0];
 %     lamda1 = zeros(3,3);
@@ -90,7 +90,7 @@ clear;
         x=1:1:iteration;
         
         % Create plot
-        plot(x,z_spare2,'b-');
+        plot(x,z_spare1,'b-');
         
         legend('ClusterHead# 1');
     
