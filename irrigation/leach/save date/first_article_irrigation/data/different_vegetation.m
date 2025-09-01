@@ -45,7 +45,10 @@ Energy_init = 50;
 
 L_expect(z) = (  (z-1).*(Energy_receive+Energy_transfer_cm).* packetLength ./ brmax + (max_clustersize-z ) .*(Energy_transfer_intracms).* packetLength ./ brmax+...
         ctrPacketLength.*(Energy_transfer_ch+Energy_receive)./ ( brmax));
-L_result_opm = subs(L_expect(z),z,40);
+L_result_opm1 = subs(L_expect(z),z,45);
+L_result_opm2 = subs(L_expect(z),z,25);
+L_result_opm3 = subs(L_expect(z),z,40);
+L_result_opm4 = subs(L_expect(z),z,40);
 L_result = subs(L_expect(z),z,z_spare1);
 L_result1 = subs(L_expect(z),z,z_spare2);
 L_result2 = subs(L_expect(z),z,z_spare3);
@@ -76,10 +79,10 @@ L_gap2 = zeros(1,1000);
 L_gap3 = zeros(1,1000);
 L_gap4 = zeros(1,1000);
 for h=1:1:1000
-    L_gap1(h)=(L_result(h)-L_result_opm)./L_result_opm;
-    L_gap2(h)=(L_result1(h)-L_result_opm)./L_result_opm;
-    L_gap3(h)=(L_result2(h)-L_result_opm)./L_result_opm;
-    L_gap4(h)=(L_result3(h)-L_result_opm)./L_result_opm;
+    L_gap1(h)=(L_result(h)-L_result_opm1)./L_result_opm1;
+    L_gap2(h)=(L_result1(h)-L_result_opm2)./L_result_opm2;
+    L_gap3(h)=(L_result2(h)-L_result_opm3)./L_result_opm3;
+    L_gap4(h)=(L_result3(h)-L_result_opm4)./L_result_opm4;
 end
 
 
