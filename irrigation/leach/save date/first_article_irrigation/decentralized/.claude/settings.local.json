@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from scipy.io import loadmat; d = loadmat\\('final.mat'\\); [print\\(k, type\\(d[k]\\).__name__, getattr\\(d[k],'shape',''\\)\\) for k in d if not k.startswith\\('__'\\)]\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"from scipy.io import loadmat; d=loadmat\\('final.mat'\\); import numpy as np; [print\\(k, 'last=', d[k].flatten\\(\\)[-1], 'mean100=', d[k].flatten\\(\\)[-100:].mean\\(\\)\\) for k in ['z_spare22','z_spare2','z_spare3','z_average']]\")",
+      "WebSearch",
+      "WebFetch(domain:www.sciencedirect.com)"
+    ]
+  }
+}
